@@ -1,0 +1,27 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class Lexer {
+    public static String[] keywordsString = {"boolean", "class"};
+    public static List<String> keywords = Arrays.asList(keywordsString);
+
+    char[] chars;
+    static int curIndex = 0;
+    static int lastIndex = 0;
+
+    public Lexer(char[] chars) {
+        this.tokens = new ArrayList<>();
+        this.chars = chars;
+    }
+
+
+    public boolean readNextChar() {
+        if (curIndex < chars.length) {
+            curIndex++;
+            if (curIndex == chars.length)
+                return false;
+            return true;
+        }
+        return false;
+    }
+}
