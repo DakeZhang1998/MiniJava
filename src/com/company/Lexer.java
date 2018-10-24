@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Lexer {
     public static String[] keywordsString = {"boolean", "class", "else", "extends", "false", "if", "int", "length", "main",
-            "new", "public", "return", "static", "this", "true", "void", "while", "String", "System.out.println"};
+            "new", "public", "return", "static", "this", "true", "void", "while", "String", "println","double","int"};
     public static String[] OperatorAndDelimitersString = {"=", "+", "-", "*", "/", "&&", "||", "!", "==", "!=", "<", "<=", ">", ">=", ";", ",", ".", "(", ")",
-            "[", "]", "{", "}","\""};
+            "[", "]", "{", "}"};
     public static List<String> keywords = Arrays.asList(keywordsString);
     public static List<String> operatorAndDelimiters = Arrays.asList(OperatorAndDelimitersString);
     ArrayList<Token> tokens;
@@ -36,13 +36,16 @@ public class Lexer {
                 Token token = isOperatorOrDelimiter();
                 tokens.add(token);
             }
-            else if(c==13||c==10||c==32){
+            else if(c==13||c==10||c==32||c==9){
                 lastIndex++;
                 readNextChar();
             }
+            else if(c=='\"'){
+                Token token = isString();
+                tokens.add(token);
+            }
             else{
-                System.out.println(chars[curIndex-1]);
-                System.out.println(c);
+                System.out.println(curIndex);
                 throw new Exception("invalid character");
             }
         }
@@ -70,21 +73,21 @@ public class Lexer {
                     if (c == '.')
                         curIndex--;
                     else {
-                        tokenInformation = new Token(48, "0");
+                        tokenInformation = new Token(46, "0");
                         return tokenInformation;
                     }
                 }
                 else {
-                    tokenInformation = new Token(48, "0");
+                    tokenInformation = new Token(46, "0");
                     return tokenInformation;
                 }
             }
             if(!readNextChar()){
                 String information = getString(lastIndex+1,curIndex-1);
                 if (isDouble)
-                    tokenInformation = new Token(49, information);
+                    tokenInformation = new Token(47, information);
                 else
-                    tokenInformation = new Token(48, information);
+                    tokenInformation = new Token(46, information);
                 return tokenInformation;
             }
             else
@@ -114,9 +117,9 @@ public class Lexer {
             }
             String information = getString(lastIndex+1,curIndex-1);
             if (isDouble)
-                tokenInformation = new Token(49, information);
+                tokenInformation = new Token(46, information);
             else
-                tokenInformation = new Token(48, information);
+                tokenInformation = new Token(45, information);
 
             lastIndex = curIndex-1;
             return tokenInformation;
@@ -127,7 +130,7 @@ public class Lexer {
 
     public Token formToken(String information, int tokenNum) {
         Token token = new Token(tokenNum, information);
-        if (token.tokenNum == 47) {
+        if (token.tokenNum == 45) {
             if (keywords.contains(information)) {
                 token.tokenNum = keywords.indexOf(information) + 1;
             }
@@ -138,18 +141,18 @@ public class Lexer {
     public Token isIdentifier() {
         if (!readNextChar()) {
             String information = getString(lastIndex + 1, curIndex - 1);
-            return formToken(information, 47);
+            return formToken(information, 45);
         }
         char c = chars[curIndex];
         while (curIndex < chars.length && ('a' <= c && c <= 'z') || ('0' <= c && c <= '9') || ('A' <= c && c <= 'Z') || c == '_' || c == '$') {
             if (!readNextChar()) {
                 String information = getString(lastIndex + 1, curIndex - 1);
-                return formToken(information, 47);
+                return formToken(information, 45);
             }
             c = chars[curIndex];
         }
         String information = getString(lastIndex + 1, curIndex - 1);
-        Token token = formToken(information, 47);
+        Token token = formToken(information, 45);
         lastIndex = curIndex - 1;
         return token;
     }
@@ -168,12 +171,68 @@ public class Lexer {
 
     public Token isOperatorOrDelimiter() {
         char c = chars[curIndex];
-        String operatorOrDelimiter = String.valueOf(c);
-        readNextChar();
-        return formToken(operatorOrDelimiter, operatorAndDelimiters.indexOf(operatorOrDelimiter) + 21);
+        if(c=='&'||c=='|'||c=='='){
+            if(readNextChar()){
+                if(chars[curIndex]==c){
+                    char[] operatorOrDelimiterArray={c,c};
+                    String operatorOrDelimiter = String.valueOf(operatorOrDelimiterArray);
+                    lastIndex+=2;
+                    readNextChar();
+                    return formToken(operatorOrDelimiter, operatorAndDelimiters.indexOf(operatorOrDelimiter) + 22);
+                }
+                else{
+                    curIndex--;
+                    String operatorOrDelimiter = String.valueOf(c);
+                    lastIndex++;
+                    readNextChar();
+                    return formToken(operatorOrDelimiter, operatorAndDelimiters.indexOf(operatorOrDelimiter) + 22);
+                }
+            }
+            else{
+                curIndex--;
+
+            }
+        }
+        else if(c=='!'||c=='<'||c=='>'){
+            if(readNextChar()){
+                char nextChar = chars[curIndex];
+                if(nextChar=='='){
+                    char[] operatorOrDelimiterArray={c,nextChar};
+                    String operatorOrDelimiter = String.valueOf(operatorOrDelimiterArray);
+                    lastIndex+=2;
+                    readNextChar();
+                    return formToken(operatorOrDelimiter, operatorAndDelimiters.indexOf(operatorOrDelimiter) + 22);
+                }
+                else{
+                    curIndex--;
+                    String operatorOrDelimiter = String.valueOf(c);
+                    lastIndex++;
+                    readNextChar();
+                    return formToken(operatorOrDelimiter, operatorAndDelimiters.indexOf(operatorOrDelimiter) + 22);
+                }
+            }
+            else{
+                curIndex--;
+            }
+        }
+        else{
+            String operatorOrDelimiter = String.valueOf(c);
+            lastIndex++;
+            readNextChar();
+            return formToken(operatorOrDelimiter, operatorAndDelimiters.indexOf(operatorOrDelimiter) + 22);
+        }
+        return null;
     }
 
-    public boolean isString() {
-        return false;
+    public Token isString() {
+        readNextChar();
+        lastIndex++;
+        while(chars[curIndex]!='\"'){
+            readNextChar();
+        }
+        String result = getString(lastIndex+1,curIndex-1);
+        readNextChar();
+        lastIndex = curIndex-1;
+        return formToken(result,45);
     }
 }

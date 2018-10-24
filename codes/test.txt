@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
+
 
 public class Lexer {
     public static String[] keywordsString = {"boolean", "class"};
@@ -9,6 +8,7 @@ public class Lexer {
     static int curIndex = 0;
     static int lastIndex = 0;
 
+    // I'm a comment!
     public Lexer(char[] chars) {
         this.tokens = new ArrayList<>();
         this.chars = chars;
@@ -22,6 +22,38 @@ public class Lexer {
                 return false;
             return true;
         }
+        double x = 1.11;
         return false;
+    }
+
+    public void test(){
+        int x = 1;
+        if(x!=0){
+            println("hello world");
+        }
+        else if(x>=2){
+            println("hello world");
+        }
+    }
+}
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+	// write your code here
+        new Main().run();
+    }
+
+    public void run() throws Exception{
+        char[] fileContent = Util.openFile("test.txt");
+        char[] fileContentRefined = Util.deleteUnusedChars(fileContent);
+        //fileContent = Util.deleteUnusedChars();
+
+        /*
+         我是一条测试文本
+         */
+         Lexer lexer = new Lexer(fileContentRefined);
+        lexer.lex();
+
+
     }
 }

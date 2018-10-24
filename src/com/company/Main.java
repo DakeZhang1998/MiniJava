@@ -9,11 +9,19 @@ public class Main {
 
     public void run() throws Exception{
         char[] fileContent = Util.openFile("test.txt");
+        char[] fileContentRefined = Util.deleteUnusedChars(fileContent);
+        //System.out.println(fileContentRefined);
         //fileContent = Util.deleteUnusedChars();
-        Lexer lexer = new Lexer(fileContent);
+
+        /*
+         我是一条测试文本
+         */
+         Lexer lexer = new Lexer(fileContentRefined);
         lexer.lex();
         for(Token token:lexer.tokens){
-            System.out.println(token.token);
+            System.out.println(token);
         }
+
+
     }
 }

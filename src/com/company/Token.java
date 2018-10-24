@@ -7,4 +7,11 @@ public class Token {
         this.tokenNum = tokenNum;
         this.token = token;
     }
+
+    @Override
+    public String toString(){
+        String result = "";
+        result = "tokenType: "+tokenNum + " token: "+token;
+        return result;
+    }
 }

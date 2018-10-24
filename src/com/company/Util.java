@@ -81,13 +81,10 @@ public class Util {
                 }
             }
         }
-
-        for (Character ch: inputList) {
-            System.out.print(ch);
+        char[] result = new char[inputList.size()];
+        for(int i=0;i<inputList.size();i++){
+            result[i] = inputList.get(i);
         }
-
-
-        char[] result = new char[10];
         return result;
     }
 
