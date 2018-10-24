@@ -4,7 +4,12 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 	// write your code here
-        new Main().run();
+        try {
+            new Main().run();
+        }
+        catch (Exception e) {
+            System.out.print(e.getMessage());
+        }
     }
 
     public void run() throws Exception{

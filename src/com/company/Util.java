@@ -19,7 +19,7 @@ public class Util {
             BufferedReader br = new BufferedReader(reader);
             String line = "";
             line = br.readLine();
-            inputContent += line;
+            inputContent += line + "\n";
             while (line != null) {
                 line = br.readLine();
                 if (line != null)
@@ -88,7 +88,7 @@ public class Util {
         return result;
     }
 
-    public static void main(String args[]) {
-        openFile("test.txt");
-    }
+//    public static void main(String args[]) {
+//        openFile("test.txt");
+//    }
 }

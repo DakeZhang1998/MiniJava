@@ -14,6 +14,7 @@ public class Lexer {
     char[] chars;
     static int curIndex = 0;
     static int lastIndex = -1;
+    static int lineNum = 1;
 
     public Lexer(char[] chars) {
         this.tokens = new ArrayList<>();
@@ -46,19 +47,30 @@ public class Lexer {
             }
             else{
                 System.out.println(curIndex);
-                throw new Exception("invalid character");
+                throw new Exception("Line " + lineNum + ": invalid character");
             }
         }
     }
 
     public boolean readNextChar() {
         if (curIndex < chars.length) {
+            if(chars[curIndex] == '\n')
+                lineNum++;
             curIndex++;
             if (curIndex == chars.length)
                 return false;
             return true;
         }
         return false;
+    }
+
+    public boolean rollBackChar() {
+        if (curIndex < 0)
+            return false;
+        curIndex--;
+        if (chars[curIndex] == '\n')
+            lineNum--;
+        return true;
     }
 
     public Token isIntegerOrDouble() throws Exception{
@@ -71,32 +83,32 @@ public class Lexer {
                 if (readNextChar()) {
                     c = chars[curIndex];
                     if (c == '.')
-                        curIndex--;
+                        rollBackChar();
                     else {
-                        tokenInformation = new Token(46, "0");
+                        tokenInformation = new Token(46, "0", lineNum);
                         return tokenInformation;
                     }
                 }
                 else {
-                    tokenInformation = new Token(46, "0");
+                    tokenInformation = new Token(46, "0", lineNum);
                     return tokenInformation;
                 }
             }
             if(!readNextChar()){
                 String information = getString(lastIndex+1,curIndex-1);
                 if (isDouble)
-                    tokenInformation = new Token(47, information);
+                    tokenInformation = new Token(47, information, lineNum);
                 else
-                    tokenInformation = new Token(46, information);
+                    tokenInformation = new Token(46, information, lineNum);
                 return tokenInformation;
             }
             else
-                curIndex--;
+                rollBackChar();
             c = chars[curIndex];
             int dotCount = 0;
             while (curIndex < chars.length && (('0' <= c && c <= '9') || c == '.')) {
                 if (c == '.' && dotCount > 0) {
-                    throw new Exception("more than one dots");   // 错误：两个小数点
+                    throw new Exception("Line " + lineNum + ": more than one dots");   // 错误：两个小数点
                 }
                 else if (c == '.') {
                     dotCount++;
@@ -113,23 +125,23 @@ public class Lexer {
             }
             if (('a' <= c && c <= 'z') || ('A'<= c && c <= 'Z') || c == '_') {
                 // 注意：这里只考虑了数字里面不能存在字母的情况，其他特殊情况之后按需添加。
-                throw new Exception("invalid expression of numbers");
+                throw new Exception("Line " + lineNum + ": invalid expression of numbers");
             }
             String information = getString(lastIndex+1,curIndex-1);
             if (isDouble)
-                tokenInformation = new Token(46, information);
+                tokenInformation = new Token(46, information, lineNum);
             else
-                tokenInformation = new Token(45, information);
+                tokenInformation = new Token(45, information, lineNum);
 
             lastIndex = curIndex-1;
             return tokenInformation;
         }
         else
-            throw new Exception("unknown error");
+            throw new Exception("Line " + lineNum + ": unknown error");
     }
 
     public Token formToken(String information, int tokenNum) {
-        Token token = new Token(tokenNum, information);
+        Token token = new Token(tokenNum, information, lineNum);
         if (token.tokenNum == 45) {
             if (keywords.contains(information)) {
                 token.tokenNum = keywords.indexOf(information) + 1;
@@ -181,7 +193,7 @@ public class Lexer {
                     return formToken(operatorOrDelimiter, operatorAndDelimiters.indexOf(operatorOrDelimiter) + 22);
                 }
                 else{
-                    curIndex--;
+                    rollBackChar();
                     String operatorOrDelimiter = String.valueOf(c);
                     lastIndex++;
                     readNextChar();
@@ -189,7 +201,7 @@ public class Lexer {
                 }
             }
             else{
-                curIndex--;
+                rollBackChar();
 
             }
         }
@@ -204,7 +216,7 @@ public class Lexer {
                     return formToken(operatorOrDelimiter, operatorAndDelimiters.indexOf(operatorOrDelimiter) + 22);
                 }
                 else{
-                    curIndex--;
+                    rollBackChar();
                     String operatorOrDelimiter = String.valueOf(c);
                     lastIndex++;
                     readNextChar();
@@ -212,7 +224,7 @@ public class Lexer {
                 }
             }
             else{
-                curIndex--;
+                rollBackChar();
             }
         }
         else{

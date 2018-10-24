@@ -1,12 +1,13 @@
 
 
+
 public class Lexer {
     public static String[] keywordsString = {"boolean", "class"};
     public static List<String> keywords = Arrays.asList(keywordsString);
 
     char[] chars;
     static int curIndex = 0;
-    static int lastIndex = 0;
+    static int lastIndex = 1;
 
     // I'm a comment!
     public Lexer(char[] chars) {
@@ -51,7 +52,7 @@ public class Main {
         /*
          我是一条测试文本
          */
-         Lexer lexer = new Lexer(fileContentRefined);
+        Lexer lexer = new Lexer(fileContentRefined);
         lexer.lex();
 
 
