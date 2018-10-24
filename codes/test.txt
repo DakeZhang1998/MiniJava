@@ -1,60 +1,39 @@
+public class Test{
+    int index;
+    String s;
 
-
-
-public class Lexer {
-    public static String[] keywordsString = {"boolean", "class"};
-    public static List<String> keywords = Arrays.asList(keywordsString);
-
-    char[] chars;
-    static int curIndex = 0;
-    static int lastIndex = 1;
-
-    // I'm a comment!
-    public Lexer(char[] chars) {
-        this.tokens = new ArrayList<>();
-        this.chars = chars;
+    Test(int index, String s){
+        this.index = index;
+        this.s = s;
     }
 
+    // I'm a comment
 
-    public boolean readNextChar() {
-        if (curIndex < chars.length) {
-            curIndex++;
-            if (curIndex == chars.length)
-                return false;
-            return true;
+    public static void operatorTest(){
+        int x = 0;
+        double y = 0.0;
+        if(x==0){
+            print(s);
         }
-        double x = 1.11;
-        return false;
-    }
-
-    public void test(){
-        int x = 1;
-        if(x!=0){
-            println("hello world");
+        else if(x>=1){
+            print("hello world");
         }
-        else if(x>=2){
-            println("hello world");
+        else{
+            String $s = "miniJava language";
+            print($s);
         }
     }
-}
-public class Main {
 
-    public static void main(String[] args) throws Exception {
-	// write your code here
-        new Main().run();
+    public static int formulaTest(){
+        int x = 6*2-9+3;
+        return x;
     }
 
-    public void run() throws Exception{
-        char[] fileContent = Util.openFile("test.txt");
-        char[] fileContentRefined = Util.deleteUnusedChars(fileContent);
-        //fileContent = Util.deleteUnusedChars();
-
-        /*
-         我是一条测试文本
-         */
-        Lexer lexer = new Lexer(fileContentRefined);
-        lexer.lex();
-
-
+    /*
+     I'm a comment!
+     */
+    public static void main(){
+        formulaTest();
+        operatorTest();
     }
 }
