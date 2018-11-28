@@ -38,7 +38,7 @@ public class Util {
 
 
     // 去除无用字符
-    public static char[] deleteUnusedChars(char[] inputChars) {
+    public static char[] deleteUnusedChars(char[] inputChars) throws Exception{
         String inputStr = String.valueOf(inputChars);
 
 //        String[] lines = inputStr.split("\n");
@@ -53,10 +53,13 @@ public class Util {
         for (Character ch: inputChars) {
             inputList.add(ch);
         }
+        int lineNum = 1;
 
         char currChar = ' ';
         for (int i = 0; i < inputList.size(); i++) {
             currChar = inputList.get(i);
+            if(currChar == '\n')
+                lineNum++;
             if (currChar == '/') {
                 if (i < inputList.size() - 1) {
                     currChar = inputList.get(i+1);
@@ -76,6 +79,8 @@ public class Util {
                             else
                                 i++;
                         }
+                        if (i == inputList.size() - 1 && !(last == '*' && current == '/'))
+                            throw new Exception("Line " + lineNum + ": comment unclosed at the end of the file");
                         inputList.remove(i);
                     }
                 }

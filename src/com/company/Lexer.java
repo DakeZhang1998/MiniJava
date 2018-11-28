@@ -33,7 +33,7 @@ public class Lexer {
                 Token token = isIntegerOrDouble();
                 tokens.add(token);
             }
-            else if(operatorAndDelimiters.contains(String.valueOf(c))){
+            else if(operatorAndDelimiters.contains(String.valueOf(c))||c=='&'||c=='|'){
                 Token token = isOperatorOrDelimiter();
                 tokens.add(token);
             }
@@ -85,6 +85,8 @@ public class Lexer {
                     if (c == '.')
                         rollBackChar();
                     else {
+                        if(chars[curIndex+1]>='0'&&chars[curIndex+1]<='9')
+                            throw new Exception("Line " + lineNum + ": invalid interger");
                         tokenInformation = new Token(46, "0", lineNum);
                         return tokenInformation;
                     }
@@ -142,7 +144,7 @@ public class Lexer {
 
     public Token formToken(String information, int tokenNum) {
         Token token = new Token(tokenNum, information, lineNum);
-        if (token.tokenNum == 45) {
+        if (token.tokenNum == 45 || token.tokenNum==48) {
             if (keywords.contains(information)) {
                 token.tokenNum = keywords.indexOf(information) + 1;
             }
@@ -153,18 +155,18 @@ public class Lexer {
     public Token isIdentifier() {
         if (!readNextChar()) {
             String information = getString(lastIndex + 1, curIndex - 1);
-            return formToken(information, 45);
+            return formToken(information, 48);
         }
         char c = chars[curIndex];
         while (curIndex < chars.length && ('a' <= c && c <= 'z') || ('0' <= c && c <= '9') || ('A' <= c && c <= 'Z') || c == '_' || c == '$') {
             if (!readNextChar()) {
                 String information = getString(lastIndex + 1, curIndex - 1);
-                return formToken(information, 45);
+                return formToken(information, 48);
             }
             c = chars[curIndex];
         }
         String information = getString(lastIndex + 1, curIndex - 1);
-        Token token = formToken(information, 45);
+        Token token = formToken(information, 48);
         lastIndex = curIndex - 1;
         return token;
     }
@@ -236,11 +238,14 @@ public class Lexer {
         return null;
     }
 
-    public Token isString() {
+    public Token isString() throws Exception {
         readNextChar();
+        int lineError = lineNum;
         lastIndex++;
         while(chars[curIndex]!='\"'){
-            readNextChar();
+            if(!readNextChar()){
+                throw new Exception("Line " + lineError +": unclosed double quotation mark");
+            }
         }
         String result = getString(lastIndex+1,curIndex-1);
         readNextChar();
