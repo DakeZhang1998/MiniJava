@@ -2,19 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b702084e-7351-48bc-89ca-dee209364af5" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/company/Parser.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/miniJava.iml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/miniJava/com/company/Lexer.class" afterPath="$PROJECT_DIR$/out/production/miniJava/com/company/Lexer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/miniJava/com/company/Main.class" afterPath="$PROJECT_DIR$/out/production/miniJava/com/company/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/miniJava/com/company/Token.class" afterPath="$PROJECT_DIR$/out/production/miniJava/com/company/Token.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/miniJava/com/company/Util.class" afterPath="$PROJECT_DIR$/out/production/miniJava/com/company/Util.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/codes/test.txt" afterPath="$PROJECT_DIR$/codes/test.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/company/Lexer.java" afterPath="$PROJECT_DIR$/src/com/company/Lexer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/company/Main.java" afterPath="$PROJECT_DIR$/src/com/company/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/company/Util.java" afterPath="$PROJECT_DIR$/src/com/company/Util.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/company/Parser.java" afterPath="$PROJECT_DIR$/src/com/company/Parser.java" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -38,17 +26,13 @@
       <file leaf-file-name="Parser.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/company/Parser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="148">
-              <caret line="155" column="3" lean-forward="true" selection-start-line="155" selection-start-column="3" selection-end-line="155" selection-end-column="3" />
+            <state relative-caret-position="6504">
+              <caret line="299" column="0" lean-forward="true" selection-start-line="299" selection-start-column="0" selection-end-line="299" selection-end-column="0" />
               <folding>
-                <element signature="e#2728#2729#0" expanded="true" />
-                <element signature="e#2755#2756#0" expanded="true" />
-                <element signature="e#5657#5658#0" expanded="true" />
-                <element signature="e#5684#5685#0" expanded="true" />
-                <element signature="e#5727#5728#0" expanded="true" />
-                <element signature="e#5754#5755#0" expanded="true" />
-                <element signature="e#5794#5795#0" expanded="true" />
-                <element signature="e#5821#5822#0" expanded="true" />
+                <element signature="e#9119#9120#0" expanded="true" />
+                <element signature="e#9146#9147#0" expanded="true" />
+                <element signature="e#9186#9187#0" expanded="true" />
+                <element signature="e#9213#9214#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -379,12 +363,12 @@
       <workItem from="1542164906252" duration="331000" />
       <workItem from="1542165364092" duration="1379000" />
       <workItem from="1542628316608" duration="667000" />
-      <workItem from="1543388319340" duration="8539000" />
+      <workItem from="1543388319340" duration="11725000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19611000" />
+    <option name="totallyTimeSpent" value="22797000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
@@ -861,17 +845,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/Parser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret line="155" column="3" lean-forward="true" selection-start-line="155" selection-start-column="3" selection-end-line="155" selection-end-column="3" />
+        <state relative-caret-position="6504">
+          <caret line="299" column="0" lean-forward="true" selection-start-line="299" selection-start-column="0" selection-end-line="299" selection-end-column="0" />
           <folding>
-            <element signature="e#2728#2729#0" expanded="true" />
-            <element signature="e#2755#2756#0" expanded="true" />
-            <element signature="e#5657#5658#0" expanded="true" />
-            <element signature="e#5684#5685#0" expanded="true" />
-            <element signature="e#5727#5728#0" expanded="true" />
-            <element signature="e#5754#5755#0" expanded="true" />
-            <element signature="e#5794#5795#0" expanded="true" />
-            <element signature="e#5821#5822#0" expanded="true" />
+            <element signature="e#9119#9120#0" expanded="true" />
+            <element signature="e#9146#9147#0" expanded="true" />
+            <element signature="e#9186#9187#0" expanded="true" />
+            <element signature="e#9213#9214#0" expanded="true" />
           </folding>
         </state>
       </provider>
