@@ -40,8 +40,14 @@ public class Parser {
         }
     }
 
-    public void parse() {
-
+    public TreeNode parse() {
+        TreeNode root =  P(null);
+        if(root!=null){
+            System.out.println("true");
+        }
+        else
+            System.out.println("false");
+        return root;
     }
 
     public TreeNode P(TreeNode node) {
@@ -65,6 +71,11 @@ public class Parser {
 
     public TreeNode C(TreeNode node) {
         TreeNode curNode = new TreeNode("C", node);
+        System.out.println(tokens.get(curIndex).tokenNum);
+        System.out.println(tokens.get(curIndex+1).tokenNum);
+        System.out.println(tokens.get(curIndex+2).tokenNum);
+        System.out.println(tokens.get(curIndex+3).tokenNum);
+        System.out.println(tokens.get(curIndex+4).tokenNum);
         if ((curIndex + 5 < tokens.size()) && tokens.get(curIndex).tokenNum == 2 && tokens.get(curIndex + 1).tokenNum == 48 && tokens.get(curIndex + 2).tokenNum == 4 && tokens.get(curIndex + 3).tokenNum == 48 && tokens.get(curIndex + 4).tokenNum == 43) {
             curIndex = curIndex + 5;
             TreeNode v = V(curNode);
@@ -111,6 +122,9 @@ public class Parser {
                         return curNode;
                     }
                 }
+            }else if(tokens.get(curIndex).tokenNum == 36){
+                readNextToken();
+                return curNode;
             }
             return curNode;
         }
@@ -363,8 +377,8 @@ public class Parser {
                 }
                 return null;
             }
-            TreeNode et = ET(curNode);
-            if (et != null) {
+            TreeNode e = E(curNode);
+            if (e != null) {
                 if (tokens.get(curIndex).tokenNum == 41) {
                     readNextToken();
                     if (tokens.get(curIndex).tokenNum == 46) {
@@ -418,14 +432,100 @@ public class Parser {
 
     public TreeNode EX(TreeNode node) {
         TreeNode curNode = new TreeNode("EX", node);
-
+        if (tokens.get(curIndex).tokenNum == 14 || tokens.get(curIndex).tokenNum == 29){
+            TreeNode u = U(curNode);
+            if(u!=null){
+                curNode.addChild(u);
+                TreeNode e = E(curNode);
+                if(e!=null){
+                    curNode.addChild(e);
+                    TreeNode ex2 = EX2(curNode);
+                    if(ex2!=null){
+                        curNode.addChild(ex2);
+                        return curNode;
+                    }
+                }
+            }
+        }
+        else if(tokens.get(curIndex).tokenNum==39){
+            readNextToken();
+            TreeNode ex = EX(curNode);
+            if(ex!=null){
+                curNode.addChild(ex);
+                if(tokens.get(curIndex).tokenNum==40){
+                    readNextToken();
+                    TreeNode ex2 = EX2(curNode);
+                    if(ex2!=null){
+                        curNode.addChild(ex2);
+                        return curNode;
+                    }
+                }
+            }
+        }
+        else if(tokens.get(curIndex).tokenNum==14||tokens.get(curIndex).tokenNum==48){
+            TreeNode lv = LV(curNode);
+            if(lv!=null){
+                curNode.addChild(lv);
+                if(tokens.get(curIndex).tokenNum==39){
+                    readNextToken();
+                    TreeNode p = P(curNode);
+                    if(p!=null){
+                        curNode.addChild(p);
+                        if(tokens.get(curIndex).tokenNum==40){
+                            readNextToken();
+                            TreeNode ex2 = EX2(curNode);
+                            if(ex2!=null){
+                                curNode.addChild(ex2);
+                                return curNode;
+                            }
+                        }
+                    }
+                }
+                else{
+                    TreeNode ex2 = EX2(curNode);
+                    if(ex2!=null){
+                        curNode.addChild(ex2);
+                        return curNode;
+                    }
+                }
+            }
+        }
+        else if(tokens.get(curIndex).tokenNum == 46 || tokens.get(curIndex).tokenNum == 47 || tokens.get(curIndex).tokenNum == 45
+                || tokens.get(curIndex).tokenNum == 15 || tokens.get(curIndex).tokenNum == 5){
+            TreeNode li = LI(curNode);
+            if(li!=null){
+                curNode.addChild(li);
+                TreeNode ex2 = EX2(curNode);
+                if(ex2!=null){
+                    curNode.addChild(ex2);
+                    return curNode;
+                }
+            }
+        }
         return null;
     }
 
-    public TreeNode ET(TreeNode node) {
-        TreeNode curNode = new TreeNode("ET", node);
-        return null;
+    public TreeNode EX2(TreeNode node) {
+        TreeNode curNode = new TreeNode("EX2", node);
+        TreeNode b = B(curNode);
+        if(b!=null){
+            curNode.addChild(b);
+            TreeNode ex = EX(curNode);
+            if(ex!=null){
+                curNode.addChild(ex);
+                TreeNode ex2 = EX2(curNode);
+                if(ex2!=null){
+                    curNode.addChild(ex2);
+                    return curNode;
+                }
+                return null;
+            }
+            return null;
+        }
+        curNode.addChild(new TreeNode("e",curNode));
+        return curNode;
     }
+
 
     public TreeNode E(TreeNode node) {
         TreeNode curNode = new TreeNode("E", node);

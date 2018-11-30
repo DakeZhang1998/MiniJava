@@ -1,17 +1,14 @@
-public class Test{
+class Test{
     int index;
-    String s;
 
     Test(int index, String s){
         this.index = index;
-        this.s = s;
     }
 
     // I'm a comment
 
     public static void operatorTest(){
         int x = 0;
-        double y = 0.0;
         if(x==0){
             print(s);
         }
@@ -21,7 +18,6 @@ public class Test{
         else if(x==1||y<2)
         else{
             String $s = "miniJava language";
-            print($s);
         }
     }
 
