@@ -88,11 +88,13 @@ public class Lexer {
                         if(chars[curIndex+1]>='0'&&chars[curIndex+1]<='9')
                             throw new Exception("Line " + lineNum + ": invalid interger");
                         tokenInformation = new Token(46, "0", lineNum);
+                        lastIndex++;
                         return tokenInformation;
                     }
                 }
                 else {
                     tokenInformation = new Token(46, "0", lineNum);
+                    lastIndex++;
                     return tokenInformation;
                 }
             }
