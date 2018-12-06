@@ -1,6 +1,21 @@
 class Test{
     int x = 22;
+    int y = 0;
+    double z = 1.1;
+    String k = "test";
     public void test(){
         println(x);
+        i = i+1;
+        x = x+y;
     }
+
+    public int test(){
+        println(x);
+        i = i+1;
+        return i;
+    }
+}
+
+class Test2{
+    int x = 0;
 }
