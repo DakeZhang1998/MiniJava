@@ -133,9 +133,9 @@ public class Lexer {
             }
             String information = getString(lastIndex+1,curIndex-1);
             if (isDouble)
-                tokenInformation = new Token(46, information, lineNum);
+                tokenInformation = new Token(47, information, lineNum);
             else
-                tokenInformation = new Token(45, information, lineNum);
+                tokenInformation = new Token(46, information, lineNum);
 
             lastIndex = curIndex-1;
             return tokenInformation;

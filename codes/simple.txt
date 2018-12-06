@@ -1,4 +1,4 @@
-class Test{
+class Test extends Test2{
     int x = 22;
     int y = 0;
     double z = 1.1;
@@ -8,7 +8,15 @@ class Test{
         i = i+1;
         x = x+y;
     }
-
+    public static void main(String[] args){
+        test();
+    }
+    public void arrayTest(){
+        int[] array = new int[4];
+        array[0] = 1;
+    }
+    int j = 0;
+    Test test = new Test();
     public int test(){
         println(x);
         i = i+1;

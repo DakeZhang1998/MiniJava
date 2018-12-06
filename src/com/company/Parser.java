@@ -107,16 +107,12 @@ public class Parser {
             curNode.addChild(IDNode2);
             curNode.addChild(leftBracket);
             curIndex = curIndex + 5;
-            TreeNode v = V(curNode);
-            if (v != null) {
-                curNode.addChild(v);
-                TreeNode m = M(curNode);
-                if (m != null) {
-                    curNode.addChild(v);
-                    if (tokens.get(curIndex).tokenNum == 44) {
-                        readNextToken();
-                        return curNode;
-                    }
+            TreeNode vm = VMBlock(curNode);
+            if(vm!=null){
+                curNode.addChild(vm);
+                if (tokens.get(curIndex).tokenNum == 44) {
+                    readNextToken();
+                    return curNode;
                 }
             }
         } else if ((curIndex + 5 < tokens.size()) && tokens.get(curIndex).tokenNum == 2 && tokens.get(curIndex + 1).tokenNum == 48 && tokens.get(curIndex + 2).tokenNum == 43) {
@@ -127,9 +123,9 @@ public class Parser {
             curNode.addChild(IDNode);
             curNode.addChild(leftBracket);
             curIndex = curIndex + 3;
-            TreeNode vb = VMBlock(curNode);
-            if(vb!=null){
-                curNode.addChild(vb);
+            TreeNode vm = VMBlock(curNode);
+            if(vm!=null){
+                curNode.addChild(vm);
                 if (tokens.get(curIndex).tokenNum == 44) {
                     readNextToken();
                     return curNode;
@@ -196,7 +192,7 @@ public class Parser {
 
     public TreeNode VSBlock(TreeNode node){
         TreeNode curNode = new TreeNode("VSBlock", node);
-        if (tokens.get(curIndex).tokenNum == 1 || tokens.get(curIndex).tokenNum == 7 || tokens.get(curIndex).tokenNum == 7
+        if (tokens.get(curIndex).tokenNum == 1 || tokens.get(curIndex).tokenNum == 7 || (tokens.get(curIndex).tokenNum == 48 &&tokens.get(curIndex+1).tokenNum==48)
                 || tokens.get(curIndex).tokenNum == 20 || tokens.get(curIndex).tokenNum == 18){
             TreeNode v = V(curNode);
             if (v != null) {
@@ -226,7 +222,7 @@ public class Parser {
     }
     public TreeNode M(TreeNode node) {
         TreeNode curNode = new TreeNode("M", node);
-        if (tokens.get(curIndex).tokenNum == 11 && tokens.get(curIndex + 1).tokenNum != 16 && tokens.get(curIndex).tokenNum != 13) {
+        if (tokens.get(curIndex).tokenNum == 11 && tokens.get(curIndex + 1).tokenNum != 16 && tokens.get(curIndex+1).tokenNum != 13) {
             readNextToken();
             TreeNode type = Type(curNode);
             if (type != null) {
@@ -242,7 +238,7 @@ public class Parser {
                         TreeNode vsBlock = VSBlock(curNode);
                         if(vsBlock!=null){
                             curNode.addChild(vsBlock);
-                            if(tokens.get(curIndex + 1).tokenNum == 44){
+                            if(tokens.get(curIndex).tokenNum == 44){
                                 readNextToken();
                                 return curNode;
                             }
@@ -272,14 +268,15 @@ public class Parser {
             }
         } else if (tokens.get(curIndex).tokenNum == 11 && tokens.get(curIndex + 1).tokenNum == 13 && tokens.get(curIndex + 2).tokenNum == 16
                 && tokens.get(curIndex + 3).tokenNum == 9 && tokens.get(curIndex + 4).tokenNum == 39 && tokens.get(curIndex + 5).tokenNum == 18
-                && tokens.get(curIndex + 6).tokenNum == 41 && tokens.get(curIndex + 7).tokenNum == 42) {
-            curIndex = curIndex + 8;
+                && tokens.get(curIndex + 6).tokenNum == 41 && tokens.get(curIndex + 7).tokenNum == 42&& tokens.get(curIndex + 8).tokenNum == 48
+                && tokens.get(curIndex + 9).tokenNum == 40) {
+            curIndex = curIndex + 10;
             if (tokens.get(curIndex).tokenNum == 43) {
                 readNextToken();
                 TreeNode vsBlock = VSBlock(curNode);
                 if(vsBlock!=null){
                     curNode.addChild(vsBlock);
-                    if(tokens.get(curIndex + 1).tokenNum == 44){
+                    if(tokens.get(curIndex).tokenNum == 44){
                         readNextToken();
                         return curNode;
                     }
@@ -483,8 +480,8 @@ public class Parser {
                         return curNode;
                     }
                 } else if (tokens.get(curIndex).tokenNum == 39) {
-                    TreeNode pa = PA(curNode);
                     readNextToken();
+                    TreeNode pa = PA(curNode);
                     if (tokens.get(curIndex).tokenNum == 40) {
                         readNextToken();
                         if (tokens.get(curIndex).tokenNum == 36) {
