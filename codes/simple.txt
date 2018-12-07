@@ -1,19 +1,36 @@
 class Test extends Test2{
+
+    public static void main(String[] args){
+        formals(1,2);
+        test();
+    }
+    public void formals(int a, int b){
+        double d = 3.3;
+    }
+
+
     int x = 22;
     int y = 0;
     double z = 1.1;
     String k = "test";
+
     public void test(){
+        while(i<2){
+                y = y + 1;
+                i = i + 1;
+        }
         if(i==1){
             i=i+1;
-         }
+        }
+        else{
+             i = i + 2;
+        }
         println(x);
         i = i+1;
         x = x+y;
     }
-    public static void main(String[] args){
-        test();
-    }
+
+
     public void arrayTest(){
         int[] array = new int[4];
         array[0] = 1;

@@ -293,7 +293,6 @@ public class Parser {
             curNode.addChild(type);
             readNextToken();
             if (tokens.get(curIndex).tokenNum == 37) {
-                readNextToken();
                 TreeNode f2 = F2(curNode);
                 if (f2 != null) {
                     curNode.addChild(f2);
@@ -427,9 +426,9 @@ public class Parser {
                 }
                 if (tokens.get(curIndex).tokenNum == 40) {
                     readNextToken();
-                    TreeNode s = S(curNode);
-                    if (s != null) {
-                        curNode.addChild(s);
+                    TreeNode stateBlock = StateBlock(curNode);
+                    if (stateBlock != null) {
+                        curNode.addChild(stateBlock);
                         return curNode;
                     }
                     return null;
@@ -494,8 +493,7 @@ public class Parser {
                 }
             }
         }
-        curNode.addChild(new TreeNode("e", curNode));
-        return curNode;
+        return null;
     }
 
     public TreeNode FE(TreeNode node) {
