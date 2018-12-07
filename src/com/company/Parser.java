@@ -132,6 +132,7 @@ public class Parser {
                 }
             }
         }
+        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
         return null;
     }
 
@@ -283,6 +284,7 @@ public class Parser {
                 }
             }
         }
+        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of method declaration");
         return null;
     }
 
@@ -332,6 +334,7 @@ public class Parser {
             }
             return curNode;
         }
+        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of variable type");
         return null;
     }
 
@@ -383,6 +386,7 @@ public class Parser {
                     readNextToken();
                     return curNode;
                 }
+                System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
                 return null;
             }
         } else if (tokens.get(curIndex).tokenNum == 6) {
@@ -402,14 +406,18 @@ public class Parser {
                                 TreeNode stateBlock2 = StateBlock(curNode);
                                 if (stateBlock2 != null)
                                     curNode.addChild(stateBlock2);
-                                else
+                                else{
+                                    System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
                                     return null;
+                                }
                                 return curNode;
                             }
                             return curNode;
                         }
+                        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
                         return null;
                     }
+                    System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
                     return null;
                 }
                 return null;
@@ -433,8 +441,10 @@ public class Parser {
                     }
                     return null;
                 }
+                System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
                 return null;
             }
+            System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
             return null;
         } else if (tokens.get(curIndex).tokenNum == 19) {
             readNextToken();
@@ -450,9 +460,11 @@ public class Parser {
                             return curNode;
                         }
                     }
+                    System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
                     return null;
                 }
             }
+            System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
             return null;
         } else if (tokens.get(curIndex).tokenNum == 12) {
             readNextToken();
@@ -463,6 +475,7 @@ public class Parser {
                     readNextToken();
                     return curNode;
                 }
+                System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
                 return null;
             }
             return null;
@@ -489,6 +502,7 @@ public class Parser {
                             return curNode;
                         }
                     }
+                    System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
                     return null;
                 }
             }
@@ -511,9 +525,11 @@ public class Parser {
                             readNextToken();
                             return curNode;
                         }
+                        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of assignment");
                         return null;
                     }
                 }
+                System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of assignment");
                 return null;
             }
             TreeNode e = E(curNode);
@@ -536,10 +552,6 @@ public class Parser {
                 return curNode;
             }
         }
-        return null;
-    }
-
-    public TreeNode L(TreeNode node) {
         return null;
     }
 
@@ -649,6 +661,7 @@ public class Parser {
                 }
             }
         }
+        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of assignment");
         return null;
     }
 
@@ -682,6 +695,7 @@ public class Parser {
             readNextToken();
             return curNode;
         }
+        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of variable type");
         return null;
     }
 
@@ -695,6 +709,7 @@ public class Parser {
             readNextToken();
             return curNode;
         }
+        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of operators");
         return null;
     }
 
@@ -705,6 +720,7 @@ public class Parser {
             curNode.addChild(new TreeNode(tokens.get(curIndex).token, curNode));
             return curNode;
         }
+        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of operators");
         return null;
     }
 
@@ -722,8 +738,10 @@ public class Parser {
                         return curNode;
                     }
                 }
+                System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of variable");
                 return null;
             }
+            System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of variable");
             return null;
         } else if (tokens.get(curIndex).tokenNum == 48) {
             readNextToken();
@@ -733,6 +751,7 @@ public class Parser {
                 return curNode;
             }
         }
+        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of variable");
         return null;
     }
 
@@ -767,6 +786,7 @@ public class Parser {
             readNextToken();
             return curNode;
         }
+        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of constants");
         return null;
     }
 }
