@@ -1,0 +1,91 @@
+Program -> ClassDecl Program 
+        -> e
+
+ClassDecl -> "class" <ID> "extends" <ID> "{" VarMethodBlock "}"
+          -> "class" <ID> "{" VarMethodBlock "}"
+
+VarMethodBlock -> VarDel VarMethodBlock
+               -> MethodDecl VarMethodBlock
+               -> e
+
+VarStateBlock -> VarDel VarStateBlock
+              -> Statement VarStateBlcok
+              -> e
+
+MethodDecl -> "public" Type <ID> "(" Formals ")" "{" VarStateBlock "}"
+           -> "public" "void" <ID> "(" Formals ")" "{" VarStateBlock "}"
+           -> "public" "static" "void" "main" "(" "String" "[" "]" ")" "{" VarStateBlock "}"
+
+Fomals -> Type <ID> Fomals'
+       -> e
+
+Fomals' -> "," Type <ID>
+        -> e
+
+VarDecl -> Type <ID> ";"
+        -> Type <ID> "=" FullExpr ";"
+
+Type -> ElmType
+     -> ElmType "[" "]"
+
+ElmType -> "boolean" | "int" | <ID> | "doube" | "String"
+
+StateBlock -> "{" Statements "}"
+           -> Statement
+
+Statements -> Statement Statements
+           -> e
+
+Statement -> LValue "=" FullExpr ";"
+          -> LValue "(" Params ")" ";"
+          -> "if" " (" Expr ")" StateBlock | "if" "(" Expr ")" StateBolck "else" StateBolck     (保证else右结合)
+          -> "while" "(" Expr ")" StateBlock
+          -> "println" "(" PrintParams ")" ";"
+          -> "return" Expr ";"
+
+Params -> Expr Params'
+       -> e
+
+Params' -> "," Expr Params'
+        -> e
+
+PrintParams -> Expr | <STR>
+
+FullExpr -> "new" ElmType "[" <INT> "]"
+         -> "new" <ID> "(" Params ")"
+         -> Expr
+
+Binop -> "+" | "-" | "*" | "/" | "&&" | "||" | "==" | "!=" | "<" | "<=" | ">" | ">="
+
+Unop -> "-" | "!"
+
+Expr -> "(" Expr ")" Expr'
+     -> Unop Expr Expr'
+     -> LValue "(" Params ")" Expr'
+     -> LValue Expr'
+     -> Literal Expr'
+
+Expr' -> Binop Expr Expr'
+      -> e
+
+LValue -> "this" "." <ID> Deref'
+       -> <ID> Deref'
+
+Deref' -> Deref Deref'
+
+Deref -> "[" Expr "]"
+      -> "." <ID>
+      -> e
+
+Literal -> <INT> | <DOUBLE> | <STR> | "true" | "false"
+
+      
+
+
+
+
+
+
+
+
+
