@@ -2,6 +2,7 @@ package com.company;
 
 import javafx.stage.StageStyle;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class LL1 {
@@ -12,7 +13,7 @@ public class LL1 {
 }
 
 class ll1Table {
-//    String[] productions = {"E -> E or F", "F -> f"};
+//    String[] productions = {"E -> e"};
     String[] productions = {
             "Program -> ClassDecl Program", "Program -> e",
             "ClassDecl -> \"class\" <ID> \"extends\" <ID> \"{\" VarMethodBlock \"}\"",
@@ -76,16 +77,17 @@ class ll1Table {
             "Expr' -> Binop Expr Expr'",
             "LValue -> \"this\" \".\" <ID> Deref'",
             "LValue -> <ID> Deref'",
-//            "Deref' -> Deref Deref'",
-//            "Deref -> \"[\" Expr \"]\"",
-//            "Deref -> \".\" <ID>",
-//            "Deref -> e",
+            "Deref' -> Deref Deref'",
+            "Deref' -> e",
+            "Deref -> \"[\" Expr \"]\"",
+            "Deref -> \".\" <ID>",
             "Literal -> <INT>",
             "Literal -> <DOUBLE>",
             "Literal -> <STR>",
             "Literal -> \"true\"",
             "Literal -> \"false\""
     };
+    List<String> productionList = Arrays.asList(productions);
     ArrayList<String> nonterminators = new ArrayList<String>();
     ArrayList<String> terminators = new ArrayList<String>();
     HashMap<String, ArrayList<String>> firstSet = new HashMap<String, ArrayList<String>>();
@@ -114,36 +116,37 @@ class ll1Table {
             for (int j = 0; j < colCount - 1; j++)
                 table[i + 1][j + 1] = "error";
 
-//        for (String nonterminator: nonterminators) {
-//            ArrayList<String> l = experssionSet.get(A);
-//            for(String s : l){
-//                HashSet<Character> set = firstSetX.get(s);
-//                for (char a : set)
-//                    insert(A, a, s);
-//                if(set.contains('~'))  {
-//                    HashSet<Character> setFollow = followSet.get(A);
-//                    if(setFollow.contains('$'))
-//                        insert(A, '$', s);
-//                    for (char b : setFollow)
-//                        insert(A, b, s);
-//                }
-//            }
-//        }
+        for (String A: nonterminators) {
+            ArrayList<String> l = productionSet.get(A);
+            for (String s: l) {
+                int productionNum = productionList.indexOf(A + " -> " + s);
+                ArrayList<String> set = firstSetX.get(s);
+                for (String a : set)
+                    insert(A, a, productionNum);
+                if(set.contains("e"))  {
+                    ArrayList<String> setFollow = followSet.get(A);
+                    if(setFollow.contains('$'))
+                        insert(A, "$", productionNum);
+                    for (String b : setFollow)
+                        insert(A, b, productionNum);
+                }
+            }
+        }
 
         // Print the table in two parts.
-//        for (int i = 0; i < table.length; i++) {
-//            for (int j = 0; j < table[i].length / 2; j++) {
-//                System.out.print(String.format("%-17s", table[i][j]));
-//            }
-//            System.out.println();
-//        }
-//        System.out.println("\n-----------------------------------------------------------------------------------------------------------------------\n");
-//        for (int i = 0; i < table.length; i++) {
-//            for (int j = table[i].length / 2; j < table[i].length; j++) {
-//                System.out.print(String.format("%-17s", table[i][j]));
-//            }
-//            System.out.println();
-//        }
+        for (int i = 0; i < table.length; i++) {
+            for (int j = 0; j < table[i].length / 2; j++) {
+                System.out.print(String.format("%-17s", table[i][j]));
+            }
+            System.out.println();
+        }
+        System.out.println("\n-----------------------------------------------------------------------------------------------------------------------\n");
+        for (int i = 0; i < table.length; i++) {
+            for (int j = table[i].length / 2; j < table[i].length; j++) {
+                System.out.print(String.format("%-17s", table[i][j]));
+            }
+            System.out.println();
+        }
 
 
     }
@@ -170,18 +173,32 @@ class ll1Table {
 
         for (String nonterminator: nonterminators)
             getFirst(nonterminator);
-//        for (String nonterminator : nonterminators) {
-//            ArrayList<String> rightParts = productionSet.get(nonterminator);
-//            for (String rightPart : rightParts)
-//                getFirst(rightPart);
-//        }
 
-        System.out.println(firstSet);
+        for (String terminator: terminators) {
+            if (!firstSet.containsKey(terminator)) {
+                ArrayList<String> eValue = new ArrayList<String>();
+                eValue.add(terminator);
+                firstSet.put(terminator, eValue);
+            }
+        }
+
+        for (String nonterminator: nonterminators) {
+            ArrayList<String> rightParts = productionSet.get(nonterminator);
+            for (String rightPart: rightParts)
+                getFirstX(rightPart);
+        }
 
         getFollow(S);
         for (String nonterminator: nonterminators) {
             getFollow(nonterminator);
         }
+
+//        Iterator iter = followSet.keySet().iterator();
+//        while (iter.hasNext()) {
+//            String key = String.valueOf(iter.next());
+//            ArrayList<String> val = followSet.get(key);
+//            System.out.print(key + "\t" + val.toString() + "\n");
+//        }
     }
 
     void getFirst(String symbol) {
@@ -195,7 +212,6 @@ class ll1Table {
             }
             return;
         }
-
 
         // For non-terminators, each production will be executed.
         ArrayList<String> rightParts = productionSet.get(symbol);
@@ -240,24 +256,161 @@ class ll1Table {
     }
 
     void getFirstX(String str) {
+        ArrayList<String> result = (firstSetX.containsKey(str))? firstSetX.get(str) : new ArrayList<String>();
+        String[] tokens;
+        if (str.indexOf(" ") != -1) {
+            tokens = str.split(" ");
+        }
+        else {
+            tokens = new String[1];
+            tokens[0] = str;
+        }
 
+        int i = 0;
+        while (i < tokens.length) {
+            String tn = tokens[i];
+            ArrayList<String> tvSet = firstSet.get(tn);
+            // Add the first set except e.
+            for (String temp: tvSet)
+                if(!temp.equals("e") && result.indexOf(temp) == -1)
+                    result.add(temp);
+            // If its first set contains e, we use the next symbol.
+            if (tvSet.contains("e"))
+                i++;
+                // Otherwise, we will move to the next production.
+            else
+                break;
+            // Since the first set of every symbol contains e, we add e.
+            if (i == tokens.length && result.indexOf("e") == -1) {
+                result.add("e");
+            }
+        }
+        firstSetX.put(str, result);
     }
 
-    void getFollow(String terminator) {
+    void getFollow(String nonterminator) {
+        ArrayList<String> rightParts = productionSet.get(nonterminator);
+        ArrayList<String> result = followSet.containsKey(nonterminator) ? followSet.get(nonterminator) : new ArrayList<String>();
 
+        // If it is the beginning symbol, we add "$".
+        if (nonterminator.equals(S)) {
+            if (result.indexOf("$") == -1)
+                result.add("$");
+        }
+
+        // Search every production to find the terminator following the current non-terminator.
+        for (String str: nonterminators) {
+            ArrayList<String> temp = productionSet.get(str);
+            String[] tokens;
+            for (String s: temp) {
+                if (s.indexOf(" ") != -1) {
+                    tokens = s.split(" ");
+                } else {
+                    tokens = new String[1];
+                    tokens[0] = s;
+                }
+                for (int i = 0; i < tokens.length; i++)
+                    if (tokens[i].equals(str) && i + 1 < tokens.length && terminators.indexOf(tokens[i + 1]) != -1
+                            && result.indexOf(tokens[i + 1]) == -1)
+                        result.add(tokens[i + 1]);
+            }
+        }
+        followSet.put(nonterminator, result);
+
+        // Process each production of X.
+        for (String rightOne: rightParts) {
+            String[] tokens;
+            if (rightOne.indexOf(" ") != -1) {
+                tokens = rightOne.split(" ");
+            } else {
+                tokens = new String[1];
+                tokens[0] = rightOne;
+            }
+            int i = tokens.length - 1;
+            while (i >= 0) {
+                String tn = tokens[i];
+                // In this case, we only care about the non-terminators.
+                if(nonterminators.indexOf(tn) != -1) {
+                    // A->αBβ
+                    // If β doesn't exist, we add follow(A) into follow(B)
+                    // If β exists, we add first(β) except e to follow(B).
+                    // If β exists and first(β) contains e, we add follow(A) into follow(B).
+
+                    // If β exists
+                    if (tokens.length - i - 1 > 0) {
+                        String right = "";
+                        for (int j = i + 1; j < tokens.length; j++) {
+                            right = right + tokens[j] + " ";
+                        }
+                        right = right.substring(0, right.length() - 1);
+
+                        // Add first(β) except e into follow(B).
+                        ArrayList<String> first = null;
+                        if(!right.contains(" ") && firstSet.containsKey(right))
+                            first = firstSet.get(right);
+                        else {
+                            if(!firstSetX.containsKey(right)){
+                                ArrayList<String> set = new ArrayList<String>();
+                                firstSetX.put(right, set);
+                                getFirstX(right);
+                            }
+                            first = firstSetX.get(right);
+                        }
+
+                        ArrayList<String> setB = followSet.containsKey(tn) ? followSet.get(tn) : new ArrayList<String>();
+                        for (String str: first)
+                            if (!str.equals("e") && !setB.contains(str))
+                                setB.add(str);
+                        followSet.put(tn, setB);
+
+                        // If first(β) contains e, we add follow(A) into follow(B).
+                        if(first.contains("e")){
+                            if(!tn.equals(nonterminator)){
+                                setB = followSet.containsKey(tn) ? followSet.get(tn) : new ArrayList<String>();
+                                for (String str: result)
+                                    if (!setB.contains(str))
+                                        setB.add(str);
+                                followSet.put(tn, setB);
+                            }
+                        }
+                    }
+                    // If β doesn't exist, we add follow(A) into follow(B).
+                    else{
+                        // Only when A and B are not equal.
+                        if(!tn.equals(nonterminator)){
+                            ArrayList<String> setB = followSet.containsKey(tn) ? followSet.get(tn) : new ArrayList<String>();
+                            for (String str: result)
+                                if (!setB.contains(str))
+                                    setB.add(str);
+                            followSet.put(tn, setB);
+                        }
+                    }
+                    i--;
+                }
+                // If the current token is a terminator, then we move forward,
+                // e.g. A->aaaBCDaaaa, where β is CDaaaa
+                else i--;
+
+            }
+        }
     }
 
-//    void insert(char X, char a,String s) {
-//        if(a == '~') a = '$';
-//        for (int i = 0; i < VnSet.size() + 1; i++) {
-//            if (table[i][0].charAt(0) == X)
-//                for (int j = 0; j < VtSet.size() + 1; j++) {
-//                    if (table[0][j].charAt(0) == a){
-//                        table[i][j] = s;
-//                        return;
-//                    }
-//                }
-//        }
-//    }
-
+    void insert(String nonterminator, String terminator, int productionNum) {
+        if (nonterminator.equals("e"))
+            nonterminator = "$";
+        for (int i = 0; i < terminators.size() + 1; i++) {
+            if (table[i][0].equals(terminator))
+                for (int j = 0; j < nonterminators.size() + 1; j++) {
+                    if (table[0][j].equals(nonterminator)){
+                        if (table[i][j].equals("error"))
+                            table[i][j] = String.valueOf(productionNum);
+                        else {
+                            table[i][j] += " / ";
+                            table[i][j] += String.valueOf(productionNum);
+                        }
+                        return;
+                    }
+                }
+        }
+    }
 }
