@@ -149,8 +149,9 @@ class ll1Table {
         }
         System.out.println("\n-----------------------------------------------------------------------------------------------------------------------\n");
         for (int i = 0; i < table.length; i++) {
+            System.out.print(String.format("%-15s", table[i][0]));
             for (int j = table[i].length / 2; j < table[i].length; j++) {
-                System.out.print(String.format("%-17s", table[i][j]));
+                System.out.print(String.format("%-15s", table[i][j]));
             }
             System.out.println();
         }
@@ -403,6 +404,7 @@ class ll1Table {
     }
 
     void insert(String nonterminator, String terminator, int productionNum) {
+        productionNum++;
         if (nonterminator.equals("e"))
             nonterminator = "$";
         for (int i = 0; i < terminators.size() + 1; i++) {
