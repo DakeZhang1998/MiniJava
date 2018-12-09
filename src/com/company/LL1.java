@@ -15,34 +15,40 @@ public class LL1 {
 class ll1Table {
 //    String[] productions = {"E -> e"};
     String[] productions = {
-            "Program -> ClassDecl Program", "Program -> e",
+            "Program -> ClassDecl Program",
+            "Program -> e",
             "ClassDecl -> \"class\" <ID> \"extends\" <ID> \"{\" VarMethodBlock \"}\"",
             "ClassDecl -> \"class\" <ID> \"{\" VarMethodBlock \"}\"",
-            "VarMethodBlock -> VarDel VarMethodBlock",
+            "VarMethodBlock -> VarDecl VarMethodBlock",
             "VarMethodBlock -> MethodDecl VarMethodBlock",
             "VarMethodBlock -> e",
-            "VarStateBlock -> VarDel VarStateBlock",
-            "VarStateBlock -> Statement VarStateBlcok",
+            "VarStateBlock -> VarDecl VarStateBlock",
+            "VarStateBlock -> Statement VarStateBlock",
             "VarStateBlock -> e",
             "MethodDecl -> \"public\" Type <ID> \"(\" Formals \")\" \"{\" VarStateBlock \"}\"",
             "MethodDecl -> \"public\" \"void\" <ID> \"(\" Formals \")\" \"{\" VarStateBlock \"}\"",
             "MethodDecl -> \"public\" \"static\" \"void\" \"main\" \"(\" \"String\" \"[\" \"]\" \")\" \"{\" VarStateBlock \"}\"",
-            "Fomals -> Type <ID> Fomals'",
-            "Fomals -> e",
-            "Fomals' -> \",\" Type <ID>",
-            "Fomals' -> e",
+            "Formals -> Type <ID> Formals'",
+            "Formals -> e",
+            "Formals' -> \",\" Type <ID>",
+            "Formals' -> e",
             "VarDecl -> Type <ID> \";\"",
             "VarDecl -> Type <ID> \"=\" FullExpr \";\"",
             "Type -> ElmType",
             "Type -> ElmType \"[\" \"]\"",
-            "ElmType -> \"boolean\" | \"int\" | <ID> | \"doube\" | \"String\"",
+            "ElmType -> \"boolean\"",
+            "ElmType -> \"int\"",
+            "ElmType -> <ID>",
+            "ElmType -> \"double\"",
+            "ElmType -> \"String\"",
             "StateBlock -> \"{\" Statements \"}\"",
             "StateBlock -> Statement",
             "Statements -> Statement Statements",
             "Statements -> e",
             "Statement -> LValue \"=\" FullExpr \";\"",
             "Statement -> LValue \"(\" Params \")\" \";\"",
-            "Statement -> \"if\" \" (\" Expr \")\" StateBlock | \"if\" \"(\" Expr \")\" StateBolck \"else\" StateBolck",
+            "Statement -> \"if\" \"(\" Expr \")\" StateBlock",
+            "Statement -> \"if\" \"(\" Expr \")\" StateBlock \"else\" StateBlock",
             "Statement -> \"while\" \"(\" Expr \")\" StateBlock",
             "Statement -> \"println\" \"(\" PrintParams \")\" \";\"",
             "Statement -> \"return\" Expr \";\"",
@@ -50,7 +56,8 @@ class ll1Table {
             "Params -> e",
             "Params' -> \",\" Expr Params'",
             "Params' -> e",
-            "PrintParams -> Expr | <STR>",
+            "PrintParams -> Expr",
+            "PrintParams -> <STR>",
             "FullExpr -> \"new\" ElmType \"[\" <INT> \"]\"",
             "FullExpr -> \"new\" <ID> \"(\" Params \")\"",
             "FullExpr -> Expr",
@@ -405,8 +412,10 @@ class ll1Table {
                         if (table[i][j].equals("error"))
                             table[i][j] = String.valueOf(productionNum);
                         else {
-                            table[i][j] += " / ";
-                            table[i][j] += String.valueOf(productionNum);
+                            if (!table[i][j].equals(String.valueOf(productionNum))) {
+                                table[i][j] += " / ";
+                                table[i][j] += String.valueOf(productionNum);
+                            }
                         }
                         return;
                     }
