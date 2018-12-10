@@ -82,6 +82,7 @@ class ll1Table {
             "Expr -> Literal Expr'",
             "Expr' -> Binop Expr Expr'",
             "Expr' -> Binop Expr Expr'",
+            "Expr' -> e",
             "LValue -> \"this\" \".\" <ID> Deref'",
             "LValue -> <ID> Deref'",
             "Deref' -> Deref Deref'",

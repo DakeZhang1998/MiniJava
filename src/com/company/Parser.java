@@ -772,7 +772,7 @@ public class Parser {
     }
 
     public TreeNode EX2(TreeNode node) throws Exception{
-        int[] selectTokenNum = {23,24,25,26,27,28,30,31,32,33,34,35};
+        int[] selectTokenNum = {40,36,37,23,24,25,26,27,28,30,31,32,33,34,35};
         if(!isSafe(selectTokenNum)){
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of expression");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of expression");
@@ -816,11 +816,11 @@ public class Parser {
     }
 
     public TreeNode B(TreeNode node) throws Exception{
-        int[] selectTokenNum = {23,24,25,26,27,28,30,31,32,33,34,35};
-        if(!isSafe(selectTokenNum)){
-            System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of operators");
-            throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of operators");
-        }
+        //int[] selectTokenNum = {23,24,25,26,27,28,30,31,32,33,34,35};
+        //if(!isSafe(selectTokenNum)){
+        //    System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of operators");
+        //    throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of operators");
+        //}
         TreeNode curNode = new TreeNode("B", node);
         if (tokens.get(curIndex).tokenNum == 23 || tokens.get(curIndex).tokenNum == 24 || tokens.get(curIndex).tokenNum == 25
                 || tokens.get(curIndex).tokenNum == 26 || tokens.get(curIndex).tokenNum == 27 || tokens.get(curIndex).tokenNum == 28
