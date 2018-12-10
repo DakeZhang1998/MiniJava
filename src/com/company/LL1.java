@@ -80,6 +80,7 @@ class ll1Table {
             "Expr -> LValue \"(\" Params \")\" Expr'",
             "Expr -> LValue Expr'",
             "Expr -> Literal Expr'",
+            "Expr -> e",
             "Expr' -> Binop Expr Expr'",
             "Expr' -> Binop Expr Expr'",
             "Expr' -> e",
@@ -97,6 +98,9 @@ class ll1Table {
     };
     List<String> productionList = Arrays.asList(productions);
     ArrayList<String> nonterminators = new ArrayList<String>();
+    ArrayList<String> initTerminators = new ArrayList<String>();
+
+
     ArrayList<String> terminators = new ArrayList<String>();
     HashMap<String, ArrayList<String>> firstSet = new HashMap<String, ArrayList<String>>();
     HashMap<String, ArrayList<String>> firstSetX = new HashMap<String, ArrayList<String>>();
@@ -109,6 +113,9 @@ class ll1Table {
     String[][] table;
 
     void generateTable() {
+        initTerminators.addAll(Lexer.keywords);
+        initTerminators.addAll(Lexer.operatorAndDelimiters);
+
         init();
 
         int rowCount = terminators.size() + 1;
@@ -116,8 +123,19 @@ class ll1Table {
         table = new String[rowCount][colCount];
         table[0][0] = "Vt\\Vn";
 
-        for (int i = 0; i < rowCount - 1; i++)
-            table[i + 1][0] = (terminators.get(i).equals("e")) ? "$" : terminators.get(i);
+        for (int i = 0; i < rowCount - 1; i++) {
+            String str = terminators.get(i);
+            if (!str.equals("e"))
+                str = str.substring(1, str.length() - 1);
+            int num = initTerminators.indexOf(str) + 1;
+            if (num == 0) {
+                table[i + 1][0] = (terminators.get(i).equals("e")) ? "$" : terminators.get(i);
+            }
+            else {
+                table[i + 1][0] = (str.equals("e")) ? "$" : str + "(" + num + ")";
+            }
+
+        }
         for (int i = 0; i < colCount - 1; i++)
             table[0][i + 1] = nonterminators.get(i);
         for (int i = 0; i < rowCount - 1; i++)
@@ -129,7 +147,7 @@ class ll1Table {
             for (String s: l) {
                 int productionNum = productionList.indexOf(A + " -> " + s);
                 ArrayList<String> set = firstSetX.get(s);
-                for (String a : set)
+                for (String a: set)
                     insert(A, a, productionNum);
                 if(set.contains("e"))  {
                     ArrayList<String> setFollow = followSet.get(A);
@@ -156,7 +174,6 @@ class ll1Table {
             }
             System.out.println();
         }
-
 
     }
 
