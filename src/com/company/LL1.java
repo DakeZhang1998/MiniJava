@@ -86,6 +86,8 @@ class ll1Table {
             "Expr' -> e",
             "LValue -> \"this\" \".\" <ID> Deref'",
             "LValue -> <ID> Deref'",
+            "LValue -> \"this\" \".\" <ID>",
+            "LValue -> <ID>",
             "Deref' -> Deref Deref'",
             "Deref' -> e",
             "Deref -> \"[\" Expr \"]\"",
@@ -124,18 +126,9 @@ class ll1Table {
         table[0][0] = "Vt\\Vn";
 
         for (int i = 0; i < rowCount - 1; i++) {
-            String str = terminators.get(i);
-            if (!str.equals("e"))
-                str = str.substring(1, str.length() - 1);
-            int num = initTerminators.indexOf(str) + 1;
-            if (num == 0) {
                 table[i + 1][0] = (terminators.get(i).equals("e")) ? "$" : terminators.get(i);
-            }
-            else {
-                table[i + 1][0] = (str.equals("e")) ? "$" : str + "(" + num + ")";
-            }
-
         }
+
         for (int i = 0; i < colCount - 1; i++)
             table[0][i + 1] = nonterminators.get(i);
         for (int i = 0; i < rowCount - 1; i++)
@@ -159,6 +152,20 @@ class ll1Table {
             }
         }
 
+
+        for (int i = 0; i < rowCount - 1; i++) {
+            String str = terminators.get(i);
+            if (!str.equals("e"))
+                str = str.substring(1, str.length() - 1);
+            int num = initTerminators.indexOf(str) + 1;
+            if (num == 0) {
+                table[i + 1][0] = (terminators.get(i).equals("e")) ? "$" : terminators.get(i);
+            }
+            else {
+                table[i + 1][0] = (str.equals("e")) ? "$" : str + "(" + num + ")";
+            }
+
+        }
         // Print the table in two parts.
         for (int i = 0; i < table.length; i++) {
             for (int j = 0; j < table[i].length / 2; j++) {

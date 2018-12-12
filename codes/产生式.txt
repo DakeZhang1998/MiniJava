@@ -1,91 +1,82 @@
-Program -> ClassDecl Program 
-        -> e
-
+Program -> ClassDecl Program
+Program -> e
 ClassDecl -> "class" <ID> "extends" <ID> "{" VarMethodBlock "}"
-          -> "class" <ID> "{" VarMethodBlock "}"
-
-VarMethodBlock -> VarDel VarMethodBlock
-               -> MethodDecl VarMethodBlock
-               -> e
-
-VarStateBlock -> VarDel VarStateBlock
-              -> Statement VarStateBlcok
-              -> e
-
+ClassDecl -> "class" <ID> "{" VarMethodBlock "}"
+VarMethodBlock -> VarDecl VarMethodBlock
+VarMethodBlock -> MethodDecl VarMethodBlock
+VarMethodBlock -> e
+VarStateBlock -> VarDecl VarStateBlock
+VarStateBlock -> Statement VarStateBlock
+VarStateBlock -> e
 MethodDecl -> "public" Type <ID> "(" Formals ")" "{" VarStateBlock "}"
-           -> "public" "void" <ID> "(" Formals ")" "{" VarStateBlock "}"
-           -> "public" "static" "void" "main" "(" "String" "[" "]" ")" "{" VarStateBlock "}"
-
-Fomals -> Type <ID> Fomals'
-       -> e
-
-Fomals' -> "," Type <ID>
-        -> e
-
+MethodDecl -> "public" "void" <ID> "(" Formals ")" "{" VarStateBlock "}"
+MethodDecl -> "public" "static" "void" "main" "(" "String" "[" "]" ")" "{" VarStateBlock "}"
+Formals -> Type <ID> Formals'
+Formals -> e
+Formals' -> "," Type <ID>
+Formals' -> e
 VarDecl -> Type <ID> ";"
-        -> Type <ID> "=" FullExpr ";"
-
+VarDecl -> Type <ID> "=" FullExpr ";"
 Type -> ElmType
-     -> ElmType "[" "]"
-
-ElmType -> "boolean" | "int" | <ID> | "doube" | "String"
-
+Type -> ElmType "[" "]"
+ElmType -> "boolean"
+ElmType -> "int"
+ElmType -> <ID>
+ElmType -> "double"
+ElmType -> "String"
 StateBlock -> "{" Statements "}"
-           -> Statement
-
+StateBlock -> Statement
 Statements -> Statement Statements
-           -> e
-
+Statements -> e
 Statement -> LValue "=" FullExpr ";"
-          -> LValue "(" Params ")" ";"
-          -> "if" " (" Expr ")" StateBlock | "if" "(" Expr ")" StateBolck "else" StateBolck     (保证else右结合)
-          -> "while" "(" Expr ")" StateBlock
-          -> "println" "(" PrintParams ")" ";"
-          -> "return" Expr ";"
-
+Statement -> LValue "(" Params ")" ";"
+Statement -> "if" "(" Expr ")" StateBlock
+Statement -> "if" "(" Expr ")" StateBlock "else" StateBlock
+Statement -> "while" "(" Expr ")" StateBlock
+Statement -> "println" "(" PrintParams ")" ";"
+Statement -> "return" Expr ";"
 Params -> Expr Params'
-       -> e
-
+Params -> e
 Params' -> "," Expr Params'
-        -> e
-
-PrintParams -> Expr | <STR>
-
+Params' -> e
+PrintParams -> Expr
+PrintParams -> <STR>
 FullExpr -> "new" ElmType "[" <INT> "]"
-         -> "new" <ID> "(" Params ")"
-         -> Expr
-
-Binop -> "+" | "-" | "*" | "/" | "&&" | "||" | "==" | "!=" | "<" | "<=" | ">" | ">="
-
-Unop -> "-" | "!"
-
+FullExpr -> "new" <ID> "(" Params ")"
+FullExpr -> Expr
+Binop -> "+"
+Binop -> "-"
+Binop -> "*"
+Binop -> "/"
+Binop -> "&&"
+Binop -> "||"
+Binop -> "=="
+Binop -> "!="
+Binop -> "<"
+Binop -> "<="
+Binop -> ">"
+Binop -> ">="
+Unop -> "-"
+Unop -> "!"
 Expr -> "(" Expr ")" Expr'
-     -> Unop Expr Expr'
-     -> LValue "(" Params ")" Expr'
-     -> LValue Expr'
-     -> Literal Expr'
-
+Expr -> Unop Expr Expr'
+Expr -> LValue "(" Params ")" Expr'
+Expr -> LValue Expr'
+Expr -> Literal Expr'
+Expr -> e
 Expr' -> Binop Expr Expr'
-      -> e
-
+Expr' -> Binop Expr Expr'
+Expr' -> e
 LValue -> "this" "." <ID> Deref'
-       -> <ID> Deref'
-
+LValue -> <ID> Deref'
+LValue -> "this" "." <ID>
+LValue -> <ID>
 Deref' -> Deref Deref'
-
+Deref' -> e
 Deref -> "[" Expr "]"
-      -> "." <ID>
-      -> e
-
-Literal -> <INT> | <DOUBLE> | <STR> | "true" | "false"
-
-      
-
-
-
-
-
-
-
-
-
+Deref -> "." <ID>
+Literal -> <INT>
+Literal -> <DOUBLE>
+Literal -> <STR>
+Literal -> "true"
+Literal -> "false"
