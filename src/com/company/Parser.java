@@ -41,9 +41,9 @@ public class Parser {
     }
 
 
-    public boolean isSafe(int[] selectTokenNum){
-        for(int i:selectTokenNum){
-            if(tokens.get(curIndex).tokenNum==i){
+    public boolean isSafe(int[] selectTokenNum) {
+        for (int i : selectTokenNum) {
+            if (tokens.get(curIndex).tokenNum == i) {
                 return true;
             }
         }
@@ -52,9 +52,9 @@ public class Parser {
 
     public TreeNode parse() {
         TreeNode root = null;
-        try{
-            root =  P();
-        }catch (Exception e){
+        try {
+            root = P();
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 //        if(root!=null){
@@ -66,12 +66,11 @@ public class Parser {
     }
 
 
-
     // Program -> ClassDecl Program
     //         -> e
-    public TreeNode P() throws Exception{
-        int[] selectTokenNum = {2,40};
-        if(!isSafe(selectTokenNum)){
+    public TreeNode P() throws Exception {
+        int[] selectTokenNum = {2, 40};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of program declaration");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of program declaration");
         }
@@ -79,12 +78,14 @@ public class Parser {
         TreeNode c = C(curNode);
         if (c != null) {
             curNode.addChild(c);
-            TreeNode p = P(curNode);
-            if (p != null) {
-                curNode.addChild(p);
-                return curNode;
+            if(tokens.get(curIndex).tokenNum==2||tokens.get(curIndex).tokenNum==40){
+                TreeNode p = P(curNode);
+                if (p != null) {
+                    curNode.addChild(p);
+                    return curNode;
+                }
+                return null;
             }
-            return null;
         }
         return null;
     }
@@ -92,8 +93,8 @@ public class Parser {
     // Program -> ClassDecl Program
     //         -> e
     public TreeNode P(TreeNode node) throws Exception {
-        int[] selectTokenNum = {2,40};
-        if(!isSafe(selectTokenNum)){
+        int[] selectTokenNum = {2, 40};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of program declaration");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of program declaration");
         }
@@ -101,28 +102,30 @@ public class Parser {
         TreeNode c = C(curNode);
         if (c != null) {
             curNode.addChild(c);
-            TreeNode p = P(curNode);
-            if (p != null) {
-                curNode.addChild(p);
-                return curNode;
+            if(tokens.get(curIndex).tokenNum==2||tokens.get(curIndex).tokenNum==40){
+                TreeNode p = P(curNode);
+                if (p != null) {
+                    curNode.addChild(p);
+                    return curNode;
+                }
+                return null;
             }
-            return null;
         }
-        TreeNode e = new TreeNode("e",node);
+        TreeNode e = new TreeNode("e", node);
         curNode.addChild(e);
         return curNode;
     }
 
     // ClassDecl -> "class" <ID> "extends" <ID> "{" VarMethodBlock "}"
     //           -> "class" <ID> "{" VarMethodBlock "}"
-    public TreeNode C(TreeNode node) throws Exception{
+    public TreeNode C(TreeNode node) throws Exception {
         int[] selectTokenNum = {2};
-        if(!isSafe(selectTokenNum)){
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
         }
         TreeNode curNode = new TreeNode("C", node);
-        if(curIndex>=tokens.size()-1)
+        if (curIndex >= tokens.size() - 1)
             return null;
 //        System.out.println(tokens.get(curIndex).tokenNum);
 //        System.out.println(tokens.get(curIndex+1).tokenNum);
@@ -132,11 +135,11 @@ public class Parser {
         if ((curIndex + 5 < tokens.size()) && tokens.get(curIndex).tokenNum == 2 &&
                 tokens.get(curIndex + 1).tokenNum == 48 && tokens.get(curIndex + 2).tokenNum == 4
                 && tokens.get(curIndex + 3).tokenNum == 48 && tokens.get(curIndex + 4).tokenNum == 43) {
-            TreeNode classNode =  new TreeNode("class", curNode);
-            TreeNode IDNode =  new TreeNode("identifier", curNode);
-            TreeNode extendsNode =  new TreeNode("extends", curNode);
-            TreeNode IDNode2 =  new TreeNode("identifier", curNode);
-            TreeNode leftBracket =  new TreeNode("{", curNode);
+            TreeNode classNode = new TreeNode("class", curNode);
+            TreeNode IDNode = new TreeNode("identifier", curNode);
+            TreeNode extendsNode = new TreeNode("extends", curNode);
+            TreeNode IDNode2 = new TreeNode("identifier", curNode);
+            TreeNode leftBracket = new TreeNode("{", curNode);
             curNode.addChild(classNode);
             curNode.addChild(IDNode);
             curNode.addChild(extendsNode);
@@ -144,7 +147,7 @@ public class Parser {
             curNode.addChild(leftBracket);
             curIndex = curIndex + 5;
             TreeNode vm = VMBlock(curNode);
-            if(vm!=null){
+            if (vm != null) {
                 curNode.addChild(vm);
                 if (tokens.get(curIndex).tokenNum == 44) {
                     readNextToken();
@@ -152,15 +155,15 @@ public class Parser {
                 }
             }
         } else if ((curIndex + 5 < tokens.size()) && tokens.get(curIndex).tokenNum == 2 && tokens.get(curIndex + 1).tokenNum == 48 && tokens.get(curIndex + 2).tokenNum == 43) {
-            TreeNode classNode =  new TreeNode("class", curNode);
-            TreeNode IDNode =  new TreeNode("identifier", curNode);
-            TreeNode leftBracket =  new TreeNode("{", curNode);
+            TreeNode classNode = new TreeNode("class", curNode);
+            TreeNode IDNode = new TreeNode("identifier", curNode);
+            TreeNode leftBracket = new TreeNode("{", curNode);
             curNode.addChild(classNode);
             curNode.addChild(IDNode);
             curNode.addChild(leftBracket);
             curIndex = curIndex + 3;
             TreeNode vm = VMBlock(curNode);
-            if(vm!=null){
+            if (vm != null) {
                 curNode.addChild(vm);
                 if (tokens.get(curIndex).tokenNum == 44) {
                     readNextToken();
@@ -168,47 +171,48 @@ public class Parser {
                 }
             }
         }
+        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
+        throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
 //        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
-        return null;
     }
 
-    public TreeNode VMBlock(TreeNode node)throws Exception{
-        int[] selectTokenNum = {48,44,11,40,18,1,20,21};
-        if(!isSafe(selectTokenNum)){
+    public TreeNode VMBlock(TreeNode node) throws Exception {
+        int[] selectTokenNum = {48, 44, 11, 40, 18, 1, 20, 7};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of variable or method declaration");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of variable or method declaration");
         }
         TreeNode curNode = new TreeNode("VMBlock", node);
         if (tokens.get(curIndex).tokenNum == 1 || tokens.get(curIndex).tokenNum == 7 || tokens.get(curIndex).tokenNum == 48
-                || tokens.get(curIndex).tokenNum == 20 || tokens.get(curIndex).tokenNum == 18){
+                || tokens.get(curIndex).tokenNum == 20 || tokens.get(curIndex).tokenNum == 18) {
             TreeNode v = V(curNode);
             if (v != null) {
                 curNode.addChild(v);
                 TreeNode vb = VMBlock(curNode);
-                if(vb!=null){
+                if (vb != null) {
                     curNode.addChild(vb);
                     return curNode;
                 }
             }
-        }
-        else{
+        } else if(tokens.get(curIndex).tokenNum==11){
             TreeNode m = M(curNode);
-            if(m!=null){
+            if (m != null) {
                 curNode.addChild(m);
                 TreeNode vb = VMBlock(curNode);
-                if(vb!=null){
+                if (vb != null) {
                     curNode.addChild(vb);
                     return curNode;
                 }
             }
         }
-        TreeNode e = new TreeNode("e",node);
+        TreeNode e = new TreeNode("e", node);
         curNode.addChild(e);
         return curNode;
     }
-    public TreeNode V(TreeNode node) throws Exception{
-        int[] selectTokenNum = {48,44,11,40,18,1,20,21};
-        if(!isSafe(selectTokenNum)){
+
+    public TreeNode V(TreeNode node) throws Exception {
+        int[] selectTokenNum = {48, 44, 11, 40, 18, 1, 20, 7};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of variable declaration");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of variable declaration");
         }
@@ -227,7 +231,7 @@ public class Parser {
                         return curNode;
                     }
                 }
-            }else if(tokens.get(curIndex).tokenNum == 36){
+            } else if (tokens.get(curIndex).tokenNum == 36) {
                 readNextToken();
                 return curNode;
             }
@@ -237,49 +241,49 @@ public class Parser {
         return curNode;
     }
 
-    public TreeNode VSBlock(TreeNode node) throws Exception{
-        int[] selectTokenNum = {48,44,40,18,1,20,21,6,17,19,12,14};
-        if(!isSafe(selectTokenNum)){
+    public TreeNode VSBlock(TreeNode node) throws Exception {
+        int[] selectTokenNum = {48, 44, 40, 18, 1, 20, 7, 6, 17, 19, 12, 14};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of variable declaration or statement");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of variable declaration or statement");
         }
         TreeNode curNode = new TreeNode("VSBlock", node);
-        if (tokens.get(curIndex).tokenNum == 1 || tokens.get(curIndex).tokenNum == 7 || (tokens.get(curIndex).tokenNum == 48 &&tokens.get(curIndex+1).tokenNum==48)
-                || tokens.get(curIndex).tokenNum == 20 || tokens.get(curIndex).tokenNum == 18){
+        if (tokens.get(curIndex).tokenNum == 1 || tokens.get(curIndex).tokenNum == 7 || (tokens.get(curIndex).tokenNum == 48 && tokens.get(curIndex + 1).tokenNum == 48)
+                || tokens.get(curIndex).tokenNum == 20 || tokens.get(curIndex).tokenNum == 18) {
             TreeNode v = V(curNode);
             if (v != null) {
                 curNode.addChild(v);
                 TreeNode vs = VSBlock(curNode);
-                if(vs!=null){
+                if (vs != null) {
                     curNode.addChild(vs);
                     return curNode;
                 }
             }
-        }
-        else if(tokens.get(curIndex).tokenNum==14||tokens.get(curIndex).tokenNum==48||tokens.get(curIndex).tokenNum==6
-                ||tokens.get(curIndex).tokenNum==17||tokens.get(curIndex).tokenNum==19||tokens.get(curIndex).tokenNum==12){
+        } else if (tokens.get(curIndex).tokenNum == 14 || tokens.get(curIndex).tokenNum == 48 || tokens.get(curIndex).tokenNum == 6
+                || tokens.get(curIndex).tokenNum == 17 || tokens.get(curIndex).tokenNum == 19 || tokens.get(curIndex).tokenNum == 12) {
             TreeNode s = S(curNode);
-            if(s!=null){
+            if (s != null) {
                 curNode.addChild(s);
                 TreeNode vs = VSBlock(curNode);
-                if(vs!=null){
+                if (vs != null) {
                     curNode.addChild(vs);
                     return curNode;
                 }
             }
         }
-        TreeNode e = new TreeNode("e",node);
+        TreeNode e = new TreeNode("e", node);
         curNode.addChild(e);
         return curNode;
     }
-    public TreeNode M(TreeNode node) throws Exception{
+
+    public TreeNode M(TreeNode node) throws Exception {
         int[] selectTokenNum = {11};
-        if(!isSafe(selectTokenNum)){
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of method declaration");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of variable declaration");
         }
         TreeNode curNode = new TreeNode("M", node);
-        if (tokens.get(curIndex).tokenNum == 11 && tokens.get(curIndex + 1).tokenNum != 16 && tokens.get(curIndex+1).tokenNum != 13) {
+        if (tokens.get(curIndex).tokenNum == 11 && tokens.get(curIndex + 1).tokenNum != 16 && tokens.get(curIndex + 1).tokenNum != 13) {
             readNextToken();
             TreeNode type = Type(curNode);
             if (type != null) {
@@ -293,9 +297,9 @@ public class Parser {
                     if (tokens.get(curIndex).tokenNum == 40 && tokens.get(curIndex + 1).tokenNum == 43) {
                         curIndex += 2;
                         TreeNode vsBlock = VSBlock(curNode);
-                        if(vsBlock!=null){
+                        if (vsBlock != null) {
                             curNode.addChild(vsBlock);
-                            if(tokens.get(curIndex).tokenNum == 44){
+                            if (tokens.get(curIndex).tokenNum == 44) {
                                 readNextToken();
                                 return curNode;
                             }
@@ -314,9 +318,9 @@ public class Parser {
                 if (tokens.get(curIndex).tokenNum == 40 && tokens.get(curIndex + 1).tokenNum == 43) {
                     curIndex += 2;
                     TreeNode vsBlock = VSBlock(curNode);
-                    if(vsBlock!=null){
+                    if (vsBlock != null) {
                         curNode.addChild(vsBlock);
-                        if(tokens.get(curIndex).tokenNum == 44){
+                        if (tokens.get(curIndex).tokenNum == 44) {
                             readNextToken();
                             return curNode;
                         }
@@ -325,15 +329,15 @@ public class Parser {
             }
         } else if (tokens.get(curIndex).tokenNum == 11 && tokens.get(curIndex + 1).tokenNum == 13 && tokens.get(curIndex + 2).tokenNum == 16
                 && tokens.get(curIndex + 3).tokenNum == 9 && tokens.get(curIndex + 4).tokenNum == 39 && tokens.get(curIndex + 5).tokenNum == 18
-                && tokens.get(curIndex + 6).tokenNum == 41 && tokens.get(curIndex + 7).tokenNum == 42&& tokens.get(curIndex + 8).tokenNum == 48
+                && tokens.get(curIndex + 6).tokenNum == 41 && tokens.get(curIndex + 7).tokenNum == 42 && tokens.get(curIndex + 8).tokenNum == 48
                 && tokens.get(curIndex + 9).tokenNum == 40) {
             curIndex = curIndex + 10;
             if (tokens.get(curIndex).tokenNum == 43) {
                 readNextToken();
                 TreeNode vsBlock = VSBlock(curNode);
-                if(vsBlock!=null){
+                if (vsBlock != null) {
                     curNode.addChild(vsBlock);
-                    if(tokens.get(curIndex).tokenNum == 44){
+                    if (tokens.get(curIndex).tokenNum == 44) {
                         readNextToken();
                         return curNode;
                     }
@@ -344,22 +348,24 @@ public class Parser {
         return null;
     }
 
-    public TreeNode F(TreeNode node) throws Exception{
-        int[] selectTokenNum = {48,40,18,1,20,21};
-        if(!isSafe(selectTokenNum)){
+    public TreeNode F(TreeNode node) throws Exception {
+        int[] selectTokenNum = {48, 40, 18, 1, 20, 7};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of formal parameters");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of formal parameters");
         }
         TreeNode curNode = new TreeNode("F", node);
-        TreeNode type = Type(curNode);
-        if (type != null && tokens.get(curIndex).tokenNum == 48) {
-            curNode.addChild(type);
-            readNextToken();
-            if (tokens.get(curIndex).tokenNum == 37) {
-                TreeNode f2 = F2(curNode);
-                if (f2 != null) {
-                    curNode.addChild(f2);
-                    return curNode;
+        if (tokens.get(curIndex).tokenNum != 40) {
+            TreeNode type = Type(curNode);
+            if (type != null && tokens.get(curIndex).tokenNum == 48) {
+                curNode.addChild(type);
+                readNextToken();
+                if (tokens.get(curIndex).tokenNum == 37) {
+                    TreeNode f2 = F2(curNode);
+                    if (f2 != null) {
+                        curNode.addChild(f2);
+                        return curNode;
+                    }
                 }
             }
         }
@@ -367,9 +373,9 @@ public class Parser {
         return curNode;
     }
 
-    public TreeNode F2(TreeNode node) throws Exception{
-        int[] selectTokenNum = {40,37};
-        if(!isSafe(selectTokenNum)){
+    public TreeNode F2(TreeNode node) throws Exception {
+        int[] selectTokenNum = {40, 37};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of formal parameters");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of formal parameters");
         }
@@ -380,15 +386,16 @@ public class Parser {
             if (type != null && tokens.get(curIndex).tokenNum == 48) {
                 curNode.addChild(type);
                 readNextToken();
-            return curNode;
+                return curNode;
             }
         }
         curNode.addChild(new TreeNode("e", curNode));
         return curNode;
     }
-    public TreeNode Type(TreeNode node) throws Exception{
-        int[] selectTokenNum = {48,18,1,20,21};
-        if(!isSafe(selectTokenNum)){
+
+    public TreeNode Type(TreeNode node) throws Exception {
+        int[] selectTokenNum = {48, 18, 1, 20, 7};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of object type");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of object type");
         }
@@ -409,56 +416,59 @@ public class Parser {
         return null;
     }
 
-    public TreeNode StateBlock(TreeNode node) throws Exception{
-        int[] selectTokenNum = {48,43,6,17,19,12,14};
-        if(!isSafe(selectTokenNum)){
+    public TreeNode StateBlock(TreeNode node) throws Exception {
+        int[] selectTokenNum = {48, 43, 6, 17, 19, 12, 14};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
         }
         TreeNode curNode = new TreeNode("StateBlock", node);
-        if(tokens.get(curIndex).tokenNum==43){
+        if (tokens.get(curIndex).tokenNum == 43) {
             readNextToken();
             TreeNode ss = SS(curNode);
-            if(ss!=null){
+            if (ss != null) {
                 curNode.addChild(ss);
-                if(tokens.get(curIndex).tokenNum==44){
+                if (tokens.get(curIndex).tokenNum == 44) {
                     readNextToken();
                     return curNode;
                 }
             }
-        }
-        else{
+        } else {
             TreeNode s = S(curNode);
-            if(s!=null){
+            if (s != null) {
                 curNode.addChild(s);
                 return curNode;
             }
         }
-        return null;
+        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
+        throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
     }
 
-    public TreeNode SS(TreeNode node) throws Exception{
-        int[] selectTokenNum = {48,44,40,6,17,19,12,14};
-        if(!isSafe(selectTokenNum)){
+    public TreeNode SS(TreeNode node) throws Exception {
+        int[] selectTokenNum = {48, 44, 40, 6, 17, 19, 12, 14};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
         }
         TreeNode curNode = new TreeNode("SS", node);
-        TreeNode s = S(curNode);
-        if(s!=null){
-            curNode.addChild(s);
-            TreeNode ss = SS(curNode);
-            if(ss!=null){
-                curNode.addChild(ss);
-                return curNode;
+        if (tokens.get(curIndex).tokenNum != 44) {
+            TreeNode s = S(curNode);
+            if (s != null) {
+                curNode.addChild(s);
+                TreeNode ss = SS(curNode);
+                if (ss != null) {
+                    curNode.addChild(ss);
+                    return curNode;
+                }
             }
         }
         curNode.addChild(new TreeNode("e", curNode));
         return curNode;
     }
-    public TreeNode S(TreeNode node) throws Exception{
-        int[] selectTokenNum = {48,6,17,19,12,14};
-        if(!isSafe(selectTokenNum)){
+
+    public TreeNode S(TreeNode node) throws Exception {
+        int[] selectTokenNum = {48, 6, 17, 19, 12, 14};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
         }
@@ -473,7 +483,8 @@ public class Parser {
                     return curNode;
                 }
                 //System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
-                return null;
+                System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
+                throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
             }
         } else if (tokens.get(curIndex).tokenNum == 6) {
             readNextToken();
@@ -492,7 +503,7 @@ public class Parser {
                                 TreeNode stateBlock2 = StateBlock(curNode);
                                 if (stateBlock2 != null)
                                     curNode.addChild(stateBlock2);
-                                else{
+                                else {
                                     //System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
                                     return null;
                                 }
@@ -503,8 +514,8 @@ public class Parser {
                         //System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
                         return null;
                     }
-                    //System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
-                    return null;
+                    System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
+                    throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
                 }
                 return null;
             }
@@ -527,11 +538,12 @@ public class Parser {
                     }
                     return null;
                 }
-                //System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
-                return null;
+                System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
+                throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
             }
             //System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
-            return null;
+            System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
+            throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
         } else if (tokens.get(curIndex).tokenNum == 19) {
             readNextToken();
             if (tokens.get(curIndex).tokenNum == 39) {
@@ -541,17 +553,17 @@ public class Parser {
                     curNode.addChild(pa);
                     if (tokens.get(curIndex).tokenNum == 40) {
                         readNextToken();
-                        if(tokens.get(curIndex).tokenNum == 36){
+                        if (tokens.get(curIndex).tokenNum == 36) {
                             readNextToken();
                             return curNode;
                         }
                     }
-                    //System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
-                    return null;
+                    System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
+                    throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
                 }
             }
-            //System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
-            return null;
+            System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
+            throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
         } else if (tokens.get(curIndex).tokenNum == 12) {
             readNextToken();
             TreeNode ex = EX(curNode);
@@ -561,8 +573,8 @@ public class Parser {
                     readNextToken();
                     return curNode;
                 }
-                //System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
-                return null;
+                System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
+                throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
             }
             return null;
         } else {
@@ -588,17 +600,17 @@ public class Parser {
                             return curNode;
                         }
                     }
-                    //System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
-                    return null;
+                    System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
+                    throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
                 }
             }
         }
         return null;
     }
 
-    public TreeNode FE(TreeNode node) throws Exception{
-        int[] selectTokenNum = {48,39,45,10,46,24,29,14,47,5,14};
-        if(!isSafe(selectTokenNum)){
+    public TreeNode FE(TreeNode node) throws Exception {
+        int[] selectTokenNum = {48, 39, 45, 10, 46, 24, 29, 14, 47, 5, 14};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of full expression");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of full expression");
         }
@@ -609,19 +621,19 @@ public class Parser {
                 readNextToken();
                 if (tokens.get(curIndex).tokenNum == 39) {
                     readNextToken();
-                    TreeNode p = P(curNode);
+                    TreeNode p = PA(curNode);
                     if (p != null) {
                         curNode.addChild(p);
                         if (tokens.get(curIndex).tokenNum == 40) {
                             readNextToken();
                             return curNode;
                         }
-                        //System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of assignment");
-                        return null;
+                        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of full expression");
+                        throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of full expression");
                     }
                 }
-                //System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of assignment");
-                return null;
+                System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of full expression");
+                throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of full expression");
             }
             TreeNode e = E(curNode);
             if (e != null) {
@@ -646,18 +658,18 @@ public class Parser {
         return null;
     }
 
-    public TreeNode PA(TreeNode node) throws Exception{
-        int[] selectTokenNum = {48,39,40,45,46,24,29,14,47,5,14};
-        if(!isSafe(selectTokenNum)){
+    public TreeNode PA(TreeNode node) throws Exception {
+        int[] selectTokenNum = {48, 39, 40, 45, 46, 24, 29, 14, 47, 5, 14};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of parameters");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of parameters");
         }
         TreeNode curNode = new TreeNode("PA", node);
         TreeNode ex = EX(curNode);
-        if(ex!=null){
+        if (ex != null) {
             curNode.addChild(ex);
             TreeNode pa2 = PA2(curNode);
-            if(pa2!=null){
+            if (pa2 != null) {
                 curNode.addChild(pa2);
             }
             return curNode;
@@ -666,9 +678,9 @@ public class Parser {
         return curNode;
     }
 
-    public TreeNode PA2(TreeNode node)throws Exception{
-        int[] selectTokenNum = {40,37};
-        if(!isSafe(selectTokenNum)){
+    public TreeNode PA2(TreeNode node) throws Exception {
+        int[] selectTokenNum = {40, 37};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of parameters");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of parameters");
         }
@@ -679,7 +691,7 @@ public class Parser {
             if (ex != null) {
                 curNode.addChild(ex);
                 TreeNode pa2 = PA2(curNode);
-                if(pa2!=null){
+                if (pa2 != null) {
                     curNode.addChild(pa2);
                 }
                 return curNode;
@@ -690,78 +702,74 @@ public class Parser {
         return curNode;
     }
 
-    public TreeNode EX(TreeNode node) throws Exception{
-        int[] selectTokenNum = {48,39,45,46,24,29,14,47,5,15};
-        if(!isSafe(selectTokenNum)){
+    public TreeNode EX(TreeNode node) throws Exception {
+        int[] selectTokenNum = {48, 39, 45, 46, 24, 29, 14, 47, 5, 15, 40, 36, 37, 42};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of expression");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of expression");
         }
         TreeNode curNode = new TreeNode("EX", node);
-        if (tokens.get(curIndex).tokenNum == 14 || tokens.get(curIndex).tokenNum == 29){
+        if (tokens.get(curIndex).tokenNum == 14 || tokens.get(curIndex).tokenNum == 29) {
             TreeNode u = U(curNode);
-            if(u!=null){
+            if (u != null) {
                 curNode.addChild(u);
                 TreeNode e = E(curNode);
-                if(e!=null){
+                if (e != null) {
                     curNode.addChild(e);
                     TreeNode ex2 = EX2(curNode);
-                    if(ex2!=null){
+                    if (ex2 != null) {
                         curNode.addChild(ex2);
                         return curNode;
                     }
                 }
             }
-        }
-        else if(tokens.get(curIndex).tokenNum==39){
+        } else if (tokens.get(curIndex).tokenNum == 39) {
             readNextToken();
             TreeNode ex = EX(curNode);
-            if(ex!=null){
+            if (ex != null) {
                 curNode.addChild(ex);
-                if(tokens.get(curIndex).tokenNum==40){
+                if (tokens.get(curIndex).tokenNum == 40) {
                     readNextToken();
                     TreeNode ex2 = EX2(curNode);
-                    if(ex2!=null){
+                    if (ex2 != null) {
                         curNode.addChild(ex2);
                         return curNode;
                     }
                 }
             }
-        }
-        else if(tokens.get(curIndex).tokenNum==14||tokens.get(curIndex).tokenNum==48){
+        } else if (tokens.get(curIndex).tokenNum == 14 || tokens.get(curIndex).tokenNum == 48) {
             TreeNode lv = LV(curNode);
-            if(lv!=null){
+            if (lv != null) {
                 curNode.addChild(lv);
-                if(tokens.get(curIndex).tokenNum==39){
+                if (tokens.get(curIndex).tokenNum == 39) {
                     readNextToken();
                     TreeNode p = P(curNode);
-                    if(p!=null){
+                    if (p != null) {
                         curNode.addChild(p);
-                        if(tokens.get(curIndex).tokenNum==40){
+                        if (tokens.get(curIndex).tokenNum == 40) {
                             readNextToken();
                             TreeNode ex2 = EX2(curNode);
-                            if(ex2!=null){
+                            if (ex2 != null) {
                                 curNode.addChild(ex2);
                                 return curNode;
                             }
                         }
                     }
-                }
-                else{
+                } else {
                     TreeNode ex2 = EX2(curNode);
-                    if(ex2!=null){
+                    if (ex2 != null) {
                         curNode.addChild(ex2);
                         return curNode;
                     }
                 }
             }
-        }
-        else if(tokens.get(curIndex).tokenNum == 46 || tokens.get(curIndex).tokenNum == 47 || tokens.get(curIndex).tokenNum == 45
-                || tokens.get(curIndex).tokenNum == 15 || tokens.get(curIndex).tokenNum == 5){
+        } else if (tokens.get(curIndex).tokenNum == 46 || tokens.get(curIndex).tokenNum == 47 || tokens.get(curIndex).tokenNum == 45
+                || tokens.get(curIndex).tokenNum == 15 || tokens.get(curIndex).tokenNum == 5) {
             TreeNode li = LI(curNode);
-            if(li!=null){
+            if (li != null) {
                 curNode.addChild(li);
                 TreeNode ex2 = EX2(curNode);
-                if(ex2!=null){
+                if (ex2 != null) {
                     curNode.addChild(ex2);
                     return curNode;
                 }
@@ -771,36 +779,38 @@ public class Parser {
         return null;
     }
 
-    public TreeNode EX2(TreeNode node) throws Exception{
-        int[] selectTokenNum = {40,36,37,23,24,25,26,27,28,30,31,32,33,34,35};
-        if(!isSafe(selectTokenNum)){
-            System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of expression");
-            throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of expression");
-        }
+    public TreeNode EX2(TreeNode node) throws Exception {
         TreeNode curNode = new TreeNode("EX2", node);
-        TreeNode b = B(curNode);
-        if(b!=null){
-            curNode.addChild(b);
-            TreeNode ex = EX(curNode);
-            if(ex!=null){
-                curNode.addChild(ex);
-                TreeNode ex2 = EX2(curNode);
-                if(ex2!=null){
-                    curNode.addChild(ex2);
-                    return curNode;
+        if (tokens.get(curIndex).tokenNum != 42&&tokens.get(curIndex).tokenNum != 40&&tokens.get(curIndex).tokenNum != 36&&tokens.get(curIndex).tokenNum != 37) {
+            int[] selectTokenNum = {40, 36, 37, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35};
+            if (!isSafe(selectTokenNum)) {
+                System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of expression");
+                throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of expression");
+            }
+            TreeNode b = B(curNode);
+            if (b != null) {
+                curNode.addChild(b);
+                TreeNode ex = EX(curNode);
+                if (ex != null) {
+                    curNode.addChild(ex);
+                    TreeNode ex2 = EX2(curNode);
+                    if (ex2 != null) {
+                        curNode.addChild(ex2);
+                        return curNode;
+                    }
+                    return null;
                 }
                 return null;
             }
-            return null;
         }
-        curNode.addChild(new TreeNode("e",curNode));
+        curNode.addChild(new TreeNode("e", curNode));
         return curNode;
     }
 
 
-    public TreeNode E(TreeNode node) throws Exception{
-        int[] selectTokenNum = {48,18,20,21,1};
-        if(!isSafe(selectTokenNum)){
+    public TreeNode E(TreeNode node) throws Exception {
+        int[] selectTokenNum = {48, 18, 20, 7, 1};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of Elmtype");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of Elmtype");
         }
@@ -815,12 +825,12 @@ public class Parser {
         return null;
     }
 
-    public TreeNode B(TreeNode node) throws Exception{
-        //int[] selectTokenNum = {23,24,25,26,27,28,30,31,32,33,34,35};
-        //if(!isSafe(selectTokenNum)){
-        //    System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of operators");
-        //    throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of operators");
-        //}
+    public TreeNode B(TreeNode node) throws Exception {
+        int[] selectTokenNum = {23,24,25,26,27,28,30,31,32,33,34,35};
+        if(!isSafe(selectTokenNum)){
+            System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of operators");
+            throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of operators");
+        }
         TreeNode curNode = new TreeNode("B", node);
         if (tokens.get(curIndex).tokenNum == 23 || tokens.get(curIndex).tokenNum == 24 || tokens.get(curIndex).tokenNum == 25
                 || tokens.get(curIndex).tokenNum == 26 || tokens.get(curIndex).tokenNum == 27 || tokens.get(curIndex).tokenNum == 28
@@ -834,12 +844,12 @@ public class Parser {
         return null;
     }
 
-    public TreeNode U(TreeNode node) throws Exception{
-        int[] selectTokenNum = {24,29};
-        if(!isSafe(selectTokenNum)){
-            System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of operators");
-            throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of operators");
-        }
+    public TreeNode U(TreeNode node) throws Exception {
+        //int[] selectTokenNum = {24, 29};
+        //if (!isSafe(selectTokenNum)) {
+        //    System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of operators");
+        //    throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of operators");
+        //}
         TreeNode curNode = new TreeNode("U", node);
         if (tokens.get(curIndex).tokenNum == 14 || tokens.get(curIndex).tokenNum == 29) {
             readNextToken();
@@ -850,9 +860,9 @@ public class Parser {
         return null;
     }
 
-    public TreeNode LV(TreeNode node) throws Exception{
-        int[] selectTokenNum = {48,14};
-        if(!isSafe(selectTokenNum)){
+    public TreeNode LV(TreeNode node) throws Exception {
+        int[] selectTokenNum = {48, 14};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of left value");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of left value");
         }
@@ -863,11 +873,14 @@ public class Parser {
                 readNextToken();
                 if (tokens.get(curIndex).tokenNum == 48) {
                     readNextToken();
-                    TreeNode d2 = D2(curNode);
-                    if (d2 != null) {
-                        curNode.addChild(d2);
-                        return curNode;
+                    if (tokens.get(curIndex).tokenNum == 38 || tokens.get(curIndex).tokenNum == 41) {
+                        TreeNode d2 = D2(curNode);
+                        if (d2 != null) {
+                            curNode.addChild(d2);
+                            return curNode;
+                        }
                     }
+                    return curNode;
                 }
                 //System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of variable");
                 return null;
@@ -876,17 +889,20 @@ public class Parser {
             return null;
         } else if (tokens.get(curIndex).tokenNum == 48) {
             readNextToken();
-            TreeNode d2 = D2(curNode);
-            if (d2 != null) {
-                curNode.addChild(d2);
-                return curNode;
+            if (tokens.get(curIndex).tokenNum == 38 || tokens.get(curIndex).tokenNum == 41) {
+                TreeNode d2 = D2(curNode);
+                if (d2 != null) {
+                    curNode.addChild(d2);
+                    return curNode;
+                }
             }
+            return curNode;
         }
         //System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of variable");
         return null;
     }
 
-    public TreeNode D(TreeNode node) throws Exception{
+    public TreeNode D(TreeNode node) throws Exception {
         //int[] selectTokenNum = {41,38};
         //if(!isSafe(selectTokenNum)){
         //    System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of deref");
@@ -913,29 +929,29 @@ public class Parser {
         return null;
     }
 
-    public TreeNode D2(TreeNode node)throws Exception{
-        int[] selectTokenNum = {39,40,41,22,23,24,25,26,27,28,30,31,32,33,34,35,38};
-        if(!isSafe(selectTokenNum)){
+    public TreeNode D2(TreeNode node) throws Exception {
+        int[] selectTokenNum = {39, 40, 41, 22, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 38};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of deref");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of deref");
         }
         TreeNode curNode = new TreeNode("D'", node);
         TreeNode d = D(curNode);
-        if(d!=null){
+        if (d != null) {
             curNode.addChild(d);
             TreeNode d2 = D2(curNode);
-            if(d2!=null){
+            if (d2 != null) {
                 curNode.addChild(d2);
                 return curNode;
             }
         }
-        curNode.addChild(new TreeNode("e",curNode));
+        curNode.addChild(new TreeNode("e", curNode));
         return curNode;
     }
 
-    public TreeNode LI(TreeNode node) throws Exception{
-        int[] selectTokenNum = {45,46,47,5,15};
-        if(!isSafe(selectTokenNum)){
+    public TreeNode LI(TreeNode node) throws Exception {
+        int[] selectTokenNum = {45, 46, 47, 5, 15};
+        if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of literal");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of literal");
         }
