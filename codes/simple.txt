@@ -1,5 +1,6 @@
 class Test extends Test2{
-
+    int x = 0;
+    int y = 1;
     public static void main(String[] args){
         formals(1,2);
         test();
