@@ -1,3 +1,13 @@
-class Test2 {
-    int x = 0;
+class Test extends Test2 {
+
+    public static void main(String[] args){
+        formals(1,2);
+        test();
+    }
+    public void formals(int a, int b){
+        double d = 3.3;
+    }
+
+    int x = 22;
+    int y = 0;
 }

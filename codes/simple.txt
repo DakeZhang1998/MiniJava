@@ -6,6 +6,7 @@ class Test extends Test2{
     }
     public void formals(int a, int b){
         double d = 3.3;
+        this.name[3][2].value = 3;
     }
 
 

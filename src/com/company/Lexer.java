@@ -244,7 +244,7 @@ public class Lexer {
         readNextChar();
         int lineError = lineNum;
         lastIndex++;
-        while(chars[curIndex]!='\"'){
+        while(chars[curIndex]!='\"' || chars[curIndex - 1] == '\\') {
             if(!readNextChar()){
                 throw new Exception("Line " + lineError +": unclosed double quotation mark");
             }

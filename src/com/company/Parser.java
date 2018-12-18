@@ -98,7 +98,6 @@ public class Parser {
     public TreeNode P(TreeNode node) throws Exception {
         int[] selectTokenNum = {2, 40, 49};
         if (!isSafe(selectTokenNum)) {
-            System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of program declaration");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of program declaration");
         }
         TreeNode curNode = new TreeNode("P", node);
@@ -133,24 +132,9 @@ public class Parser {
         TreeNode curNode = new TreeNode("C", node);
         if (curIndex >= tokens.size() - 1)
             return null;
-//        System.out.println(tokens.get(curIndex).tokenNum);
-//        System.out.println(tokens.get(curIndex+1).tokenNum);
-//        System.out.println(tokens.get(curIndex+2).tokenNum);
-//        System.out.println(tokens.get(curIndex+3).tokenNum);
-//        System.out.println(tokens.get(curIndex+4).tokenNum);
         if ((curIndex + 5 < tokens.size()) && tokens.get(curIndex).tokenNum == 2 &&
                 tokens.get(curIndex + 1).tokenNum == 48 && tokens.get(curIndex + 2).tokenNum == 4
                 && tokens.get(curIndex + 3).tokenNum == 48 && tokens.get(curIndex + 4).tokenNum == 43) {
-            TreeNode classNode = new TreeNode("class", curNode);
-            TreeNode IDNode = new TreeNode("identifier", curNode);
-            TreeNode extendsNode = new TreeNode("extends", curNode);
-            TreeNode IDNode2 = new TreeNode("identifier", curNode);
-            TreeNode leftBracket = new TreeNode("{", curNode);
-            curNode.addChild(classNode);
-            curNode.addChild(IDNode);
-            curNode.addChild(extendsNode);
-            curNode.addChild(IDNode2);
-            curNode.addChild(leftBracket);
             curIndex = curIndex + 5;
             TreeNode vm = VMBlock(curNode);
             if (vm != null) {
@@ -161,12 +145,6 @@ public class Parser {
                 }
             }
         } else if ((curIndex + 5 < tokens.size()) && tokens.get(curIndex).tokenNum == 2 && tokens.get(curIndex + 1).tokenNum == 48 && tokens.get(curIndex + 2).tokenNum == 43) {
-            TreeNode classNode = new TreeNode("class", curNode);
-            TreeNode IDNode = new TreeNode("identifier", curNode);
-            TreeNode leftBracket = new TreeNode("{", curNode);
-            curNode.addChild(classNode);
-            curNode.addChild(IDNode);
-            curNode.addChild(leftBracket);
             curIndex = curIndex + 3;
             TreeNode vm = VMBlock(curNode);
             if (vm != null) {

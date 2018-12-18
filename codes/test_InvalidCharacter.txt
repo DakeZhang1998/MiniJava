@@ -9,6 +9,6 @@ public class Main {
         char[] fileContentRefined = Util.deleteUnusedChars(fileContent);
         //fileContent = Util.deleteUnusedChars();
         Lexer lexer = new Lexer(fileContentRefined);
-        lexer.lex()@;    // Error
+        lexer.lex()@;    // Line 12: invalid character
     }
 }

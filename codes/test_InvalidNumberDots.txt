@@ -5,6 +5,6 @@ public class Main {
     }
 
     public void run() throws Exception{
-        double = 3.13.13         // Error
+        double d = 3.13.13         // Error
     }
 }

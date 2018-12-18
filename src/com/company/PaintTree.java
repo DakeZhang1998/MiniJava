@@ -14,7 +14,7 @@ class TreePanel extends JPanel {
     private int gridWidth = 90;		//每个结点的宽度
     private int gridHeight = 30;	//每个结点的高度
     private int vGap = 40;			//每2个结点的垂直距离
-    private int hGap = 10;			//每2个结点的水平距离
+    private int hGap = 40;			//每2个结点的水平距离
 
     private int startY = 10;		//根结点的Y，默认距离顶部10像素
     private int startX = 0;			//根结点的X，默认水平居中对齐
@@ -97,7 +97,7 @@ class TreePanel extends JPanel {
         super.paintComponent(g);
         g.setFont(font);
         drawAllNode(tree, startX, g);
-        theSize.width = tree.colCount * (gridWidth + hGap) - hGap + 60;
+        theSize.width = tree.colCount * (gridWidth + hGap) - hGap + 150;
         setSize(theSize);
     }
 
