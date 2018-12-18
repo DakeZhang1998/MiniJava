@@ -1,26 +1,20 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridLayout;
-import java.awt.Panel;
-import java.awt.Dimension;
+package com.company;
+
+import java.awt.*;
 
 import javax.swing.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 
 class TreePanel extends JPanel {
     private TreeNode tree;				//保存整棵树
-    private int gridWidth = 30;		//每个结点的宽度
+    private int gridWidth = 90;		//每个结点的宽度
     private int gridHeight = 30;	//每个结点的高度
     private int vGap = 40;			//每2个结点的垂直距离
-    private int hGap = 40;			//每2个结点的水平距离
+    private int hGap = 10;			//每2个结点的水平距离
 
     private int startY = 10;		//根结点的Y，默认距离顶部10像素
     private int startX = 0;			//根结点的X，默认水平居中对齐
@@ -35,7 +29,8 @@ class TreePanel extends JPanel {
     private Color linkLineColor = Color.GREEN;	//结点连线颜色
     private Color stringColor = Color.BLUE;	//结点描述文字的颜色
 
-    private Dimension theSize = new Dimension(800, 600);
+    public Dimension theSize = new Dimension(800, 600);
+
     /**
      * 根据传入的Node绘制树，以绝对居中的方式绘制
      * @param n 要绘制的树
@@ -72,7 +67,28 @@ class TreePanel extends JPanel {
      */
     public void setTree(TreeNode n) {
         tree = n;
+        prepareTree();
     }
+
+    public void prepareTree() {
+        prepareTree(tree, 0);
+    }
+
+    public int prepareTree(TreeNode node, int layer) {
+        node.layer = layer;
+
+        if (node.children.size() == 0)
+            return node.colCount;
+
+        int sum = 0;
+        for (TreeNode tempNode: node.children) {
+            sum += prepareTree(tempNode, layer + 1);
+        }
+
+        node. colCount = sum;
+        return sum;
+    }
+
 
     //重写而已，调用自己的绘制方法
     public void paintComponent(Graphics g){
@@ -103,7 +119,7 @@ class TreePanel extends JPanel {
 
         g.setColor(stringColor);
         int biass = n.curNode.length();
-        g.drawString(n.curNode, x+15-biass*5, fontY-2);		//画结点的名字
+        g.drawString(n.curNode, x+40-biass*5, fontY-2);		//画结点的名字
 
         if(n.children.size() != 0){
             ArrayList<TreeNode> c = n.children;
@@ -203,55 +219,34 @@ public class PaintTree extends JFrame{
 
     public void reprint(TreeNode root) {
         this.root = root;
-        TreePanel panel1 = new TreePanel(TreePanel.CHILD_ALIGN_RELATIVE);
-        panel1.setTree(root);
 
+        TreePanel panel = new TreePanel(TreePanel.CHILD_ALIGN_RELATIVE);
+        panel.setTree(root);
 
-        contentPane.setViewportView(panel1);
-        // contentPane.setLayout(new ScrollPaneLayout());
-        contentPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        contentPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//        contentPane.add(panel2);
+        contentPane = new JScrollPane();
+        contentPane.setViewportView(panel);
+        contentPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        contentPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        add(contentPane,BorderLayout.CENTER);
-    }
+        // Set the size of the image panel, so the scroll bar will appear.
+        panel.setPreferredSize(panel.theSize);
+        panel.updateUI();
 
-    public static void main(String[] args){
-        String sentence = "1+(1+1)";
-
-        Lexer lexer = new Lexer(0,-1,sentence);
-        ArrayList<TokenInformation> tokenInformations = null;
-        try{
-            tokenInformations = lexer.parser();
-            String result = "";
-            for(TokenInformation tokenInformation:tokenInformations){
-                result += tokenInformation.toString();
-            }
-        }catch (Exception e1) {
-            e1.printStackTrace();
-        }
-        Parser parser = new Parser(tokenInformations);
-        TreeNode root = parser.parser();
-
-        PaintTree frame = new PaintTree(root);
-
-
-        frame.setSize(800, 600);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        add(contentPane);
     }
 
     public void initComponents(){
-        /*
-         * 创建一个用于绘制树的面板并将树传入,使用相对对齐方式
-         */
-        TreePanel panel1 = new TreePanel(TreePanel.CHILD_ALIGN_RELATIVE);
-        panel1.setTree(root);
+        TreePanel panel = new TreePanel(root, TreePanel.CHILD_ALIGN_RELATIVE);
+        panel.setTree(root);
 
         contentPane = new JScrollPane();
-        contentPane.setViewportView(panel1);
-        contentPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        contentPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        contentPane.setViewportView(panel);
+        contentPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        contentPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        // Set the size of the image panel, so the scroll bar will appear.
+        panel.setPreferredSize(panel.theSize);
+        panel.updateUI();
 
         add(contentPane);
     }

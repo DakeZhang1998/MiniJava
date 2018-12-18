@@ -1,7 +1,5 @@
 package com.company;
 
-import sun.reflect.generics.tree.Tree;
-
 import java.util.ArrayList;
 
 
@@ -9,6 +7,8 @@ class TreeNode {
     String curNode;
     TreeNode parent;
     ArrayList<TreeNode> children;
+    int colCount = 1;
+    int layer = 0;
 
     public TreeNode(String curNode, TreeNode parent) {
         this.curNode = curNode;
@@ -69,7 +69,7 @@ public class Parser {
     // Program -> ClassDecl Program
     //         -> e
     public TreeNode P() throws Exception {
-        int[] selectTokenNum = {2, 40};
+        int[] selectTokenNum = {2, 40, 49};
         if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of program declaration");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of program declaration");
@@ -78,7 +78,10 @@ public class Parser {
         TreeNode c = C(curNode);
         if (c != null) {
             curNode.addChild(c);
-            if(tokens.get(curIndex).tokenNum==2||tokens.get(curIndex).tokenNum==40){
+            if (tokens.get(curIndex).tokenNum == 49) {
+                return curNode;
+            }
+            else if(tokens.get(curIndex).tokenNum==2||tokens.get(curIndex).tokenNum==40){
                 TreeNode p = P(curNode);
                 if (p != null) {
                     curNode.addChild(p);
@@ -93,7 +96,7 @@ public class Parser {
     // Program -> ClassDecl Program
     //         -> e
     public TreeNode P(TreeNode node) throws Exception {
-        int[] selectTokenNum = {2, 40};
+        int[] selectTokenNum = {2, 40, 49};
         if (!isSafe(selectTokenNum)) {
             System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of program declaration");
             throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of program declaration");
@@ -102,7 +105,10 @@ public class Parser {
         TreeNode c = C(curNode);
         if (c != null) {
             curNode.addChild(c);
-            if(tokens.get(curIndex).tokenNum==2||tokens.get(curIndex).tokenNum==40){
+            if (tokens.get(curIndex).tokenNum == 49) {
+                return curNode;
+            }
+            else if(tokens.get(curIndex).tokenNum == 2 || tokens.get(curIndex).tokenNum == 40){
                 TreeNode p = P(curNode);
                 if (p != null) {
                     curNode.addChild(p);
@@ -176,6 +182,9 @@ public class Parser {
 //        System.out.println("Line " + tokens.get(curIndex).lineNum + ": invalid expression of class declaration");
     }
 
+    // VarMethodBlock -> VarDecl VarMethodBlock
+    // VarMethodBlock -> MethodDecl VarMethodBlock
+    // VarMethodBlock -> e
     public TreeNode VMBlock(TreeNode node) throws Exception {
         int[] selectTokenNum = {48, 44, 11, 40, 18, 1, 20, 7};
         if (!isSafe(selectTokenNum)) {
@@ -210,6 +219,8 @@ public class Parser {
         return curNode;
     }
 
+    // VarDecl -> Type <ID> ";"
+    // VarDecl -> Type <ID> "=" FullExpr ";"
     public TreeNode V(TreeNode node) throws Exception {
         int[] selectTokenNum = {48, 44, 11, 40, 18, 1, 20, 7};
         if (!isSafe(selectTokenNum)) {
