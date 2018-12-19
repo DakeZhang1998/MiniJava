@@ -1,27 +1,23 @@
 class Test{
     int index;
 
-    Test(int index, String s){
+    public void Test(int index, String s){
         this.index = index;
     }
 
     // I'm a comment
 
-    public static void operatorTest(){
+    public void operatorTest(){
         int x = 0;
         if(x==0){
-            print(s);
+            println(s);
         }
-        else if(x>=1&&x==1){
-            print("hello world");
-        }
-        else if(x==1||y<2)
         else{
-            String $s = "miniJava language";
+            s = "miniJava language";
         }
     }
 
-    public static int formulaTest(){
+    public int formulaTest(){
         int x = 6*2-9+3;
         return x;
     }
@@ -29,8 +25,7 @@ class Test{
     /*
      I'm a comment!
      */
-    public static void main(){
-        new Main();
+    public static void main(String[] args){
         formulaTest();
         operatorTest();
     }

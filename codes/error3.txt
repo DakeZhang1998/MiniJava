@@ -1,0 +1,13 @@
+class Error{
+   public int test(){
+           i++;
+           int x = 0;
+           if(x>0){
+           println(x);
+       }
+   }
+    int int x = 0;
+    int y = 0;
+    String string string = "test";
+    double z = 1.1;
+}

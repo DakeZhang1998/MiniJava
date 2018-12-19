@@ -18,7 +18,7 @@ public class Main {
     }
 
     public void run() throws Exception{
-        char[] fileContent = Util.openFile("simple.txt");
+        char[] fileContent = Util.openFile("test.txt");
         char[] fileContentRefined = Util.deleteUnusedChars(fileContent);
         //System.out.println(fileContentRefined);
         //fileContent = Util.deleteUnusedChars();

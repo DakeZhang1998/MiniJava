@@ -75,6 +75,9 @@ public class Parser {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        if(root==null){
+            System.out.println("invalid expression of program declaration");
+        }
         return root;
     }
 
@@ -97,7 +100,9 @@ public class Parser {
                 TreeNode p = P(curNode);
                 if (p != null) {
                     curNode.addChild(p);
-                    return curNode;
+                    if (tokens.get(curIndex).tokenNum == 49) {
+                        return curNode;
+                    }
                 }
                 return null;
             }
@@ -654,7 +659,7 @@ public class Parser {
                 }
             }
         }
-        return null;
+        throw new Exception("Line " + tokens.get(curIndex).lineNum + ": invalid expression of statement");
     }
 
     public TreeNode FE(TreeNode node) throws Exception {

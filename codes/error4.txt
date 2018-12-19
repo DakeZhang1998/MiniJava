@@ -1,0 +1,12 @@
+class Error{
+    int x = 0;
+    int y = 0;
+    String string = "test";
+    double z = 1.1;
+
+    public int test(){
+        int i = 1+1/2;
+        return 0;
+
+
+}

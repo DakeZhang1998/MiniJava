@@ -1,27 +1,27 @@
-class Test extends Test2{
-    int x = 0;
-    int y = 1;
-    public static void main(String[] args){
-        formals(1,2);
-        test();
-    }
-    public void formals(int a, int b){
-        double d = 3.3;
-        this.name[3][2].value = 3;
-    }
-
-
-    int x = 22;
+class Test extends Test2{                        // 带继承的类
+    int x = 22;                                  // 变量声明
     int y = 0;
     double z = 1.1;
     String k = "test";
+    public static void main(String[] args){     // main函数
+        int i = 1+1/2;                          // 表达式
+        formals(1,2);                           // 带参数调用函数
+        test();                                 // 无参数调用函数
+    }
+    public void formals(int a, int b){
+        double d = 3.3;
+        this.name[3][2].value = 3;             // 迭代结构
+    }
+
+
+
 
     public void test(){
-        while(i<2&&y==1){
+        while(i<2&&y==1){                      // 循环
                 y = y + 1;
                 i = i + 1;
         }
-        if(i==1){
+        if(i==1){                              // 判断
             i=i+1;
         }
         else{
@@ -35,8 +35,8 @@ class Test extends Test2{
 
 
     public void arrayTest(){
-        int[] array = new int[4];
-        array[0] = 1;
+        int[] array = new int[4];           // 数组声明
+        array[0] = 1;                       // 数组定义
     }
     int j = 0;
     Test test = new Test();
